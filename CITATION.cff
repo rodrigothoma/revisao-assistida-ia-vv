@@ -4,6 +4,7 @@ title: "Pacote de replicação: Revisão assistida por IA em Verificação e Val
 type: dataset
 version: "1.0"
 license: "CC-BY-4.0 AND MIT"
+repository-code: "https://github.com/rodrigothoma/revisao-assistida-ia-vv"
 # Preencher depois da release v1.0 no GitHub, com o DOI gerado pelo Zenodo:
 # doi: 10.5281/zenodo.XXXXXXX
 authors:
