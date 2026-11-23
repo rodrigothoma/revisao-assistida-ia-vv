@@ -1,0 +1,4 @@
+1. Linhas: 42‑47  
+   Descrição: O Javadoc do método **validarDadosPedido** não informa que ele pode lançar **IllegalArgumentException** quando os parâmetros são inválidos.  
+   Categoria: ausente  
+   Severidade: menor.

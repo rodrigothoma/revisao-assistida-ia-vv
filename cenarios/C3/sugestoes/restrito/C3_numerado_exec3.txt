@@ -1,0 +1,9 @@
+1. Linhas: 30‑31  
+   Descrição: O método considera frete grátis apenas quando valorPedido é maior que 20000 centavos, mas o Javadoc especifica que pedidos com valor a partir de 20000 centavos inclusive devem ter tarifa zero. Por exemplo, pesoGramas = 500 e valorPedido = 20000 retornam 1500 centavos em vez de 0.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 38‑39  
+   Descrição: O cálculo do frete não aplica o teto máximo de 4500 centavos previsto no Javadoc; valores acima desse limite são retornados integralmente. Por exemplo, pesoGramas = 3000 e valorPedido = 15000 produzem 2100 centavos (1500 + 2 blocos × 300) que excedem o teto, mas o método devolve 2100 em vez de 4500.  
+   Categoria: ausente  
+   Severidade: maior

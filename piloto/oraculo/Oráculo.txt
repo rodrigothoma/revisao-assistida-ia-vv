@@ -1,0 +1,34 @@
+ORÁCULO DO PILOTO — preparador A (não compartilhar)
+
+Candidatos avaliados: 4 (Lang-6, 8, 10, 12); 2 descartados, 2 aprovados.
+
+Lang-6: descartado (critério 2). O Javadoc não especifica o avanço da posição,
+e o contrato do método abstrato sugere que o código defeituoso é o correto.
+
+Lang-8: descartado (critérios 1 e 2). Patch distribuído em campo, construtor e
+método; nenhum Javadoc especifica qual fuso o nome deve refletir.
+
+P1 = Lang-10
+- Categoria: excedente. Severidade: maior. Dificuldade prevista: difícil.
+- Defeito: espaços no texto literal do padrão viram \s*+ (zero ou mais espaços),
+  tornando opcional um espaço obrigatório; viola a compatibilidade com
+  SimpleDateFormat (linhas 13-14) e o propósito de "escapar" texto constante (linha 33).
+- Linhas do defeito: 40-50. Aceitas pela tolerância de ±2: 38-52.
+- Teste gatilho (oculto): testLANG_831 (FastDateParserTest e FastDateFormat_ParserTest);
+  padrão "M E" com entrada "3  Tue" (dois espaços) deveria falhar.
+- Unidade: Javadoc da classe, escapeRegex, CopyQuotedStrategy; 2 métodos de teste.
+
+P2 = Lang-12
+- Categoria: ausente. Severidade: maior. Dificuldade prevista: fácil a média.
+- Defeito: falta lançar IllegalArgumentException para vetor chars vazio (linha 91
+  especifica) e falta ajustar end = chars.length quando start = end = 0 com chars != null.
+- Linhas: método 94-153 (categoria ausente: qualquer linha do método vale).
+  Pontos onde o código falta: após a linha 100 e no bloco 102-109.
+- Decisão: apontar qualquer uma das duas partes conta como VP
+  (registrar como achado do piloto: regra da 4.5 não cobre defeito com duas partes).
+- Testes gatilho (ocultos): testExceptions (vetor vazio deveria dar IAE) e testLANG805.
+- Unidade: duas sobrecargas, campo RANDOM, método de 7 parâmetros; 1 método de teste (trechos).
+
+Medidas (preencher): P1 cloc=__ lizard CCN=__ | P2 cloc=__ lizard CCN=__
+
+Prompt ajustado no piloto (20/10/2026), antes do lote: texto simples, descrição da unidade como trecho de classe e rótulos sem numeração. Nenhuma mudança no critério de defeito.

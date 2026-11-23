@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_fix_numerado.txt",
+  "execucao": 5,
+  "data_hora": "2026-11-10T11:41:25",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_27194a498a",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.320698582,
+    "prompt_tokens": 1116,
+    "prompt_time": 0.169444218,
+    "completion_tokens": 656,
+    "completion_time": 1.372571179,
+    "total_tokens": 1772,
+    "total_time": 1.5420153970000001,
+    "completion_tokens_details": {
+      "reasoning_tokens": 641
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects vs Javadoc.\n\nSpec: Rules:\n1. Free shipping if value >= 20000 inclusive => code does that: if (valorPedido >= 20000) return 0; OK.\n2. If weight <= 1000 inclusive, fixed base tariff 1500. Code: if (pesoGramas <= 1000) return 1500; OK.\n3. Above 1000g, add base + 300 per block of 500g additional or fraction. Code: calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso divides by 500, increments for remainder, returns blocos*300. This matches rule. Edge cases: weight exactly 1001 => pesoExcedente =1 => blocos =0; remainder => blocos++ => 1 => additional=300. So total=1800. Correct.\n4. Max freight capped at 4500. Code returns Math.min(total,4500). OK.\n\nValidate: throws IllegalArgumentException if weight <=0 or value <=0. Code does that. OK.\n\nPotential defect: The method calcularFrete returns 1500 for peso<=1000 regardless of valuePedido, but rule 1 says free shipping for orders >=20000 regardless of weight. The code checks free shipping before weight check, so free shipping applies first, OK.\n\nPotential defect: The maximum cap applied after adding base and additional, but rule says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" That's applied. However, what about scenario where weight >1000 and base+additional is less than 4500 but the free shipping rule says if value>=20000, shipping is zero regardless of cap. That's fine.\n\nMaybe defect: The method calcularAdicionalPeso does not handle negative pesoExcedente (should not occur because only called when pesoGramas >1000). So okay.\n\nCheck for overflow? Not needed.\n\nEdge case: When pesoExcedente is exactly a multiple of 500, e.g., peso =1500 => excedente=500 => blocos = 500/500=1, remainder 0, not incremented, additional=300. That matches rule \"each block of 500 grams additional or fraction\". For 500 extra, it's one block. Good.\n\nEdge case: peso = 1001 => as above 300. Good.\n\nPotential defect: The Javadoc says \"valor final cobrado não pode exceder o teto de 4500 centavos\". The code caps at 4500 after adding base and additional. But what about scenario where base + additional is >4500, but free shipping rule would have set to 0? Already covered.\n\nI see no functional defect.\n\nBut maybe the specification about \"frete máximo\" could imply that the cap should apply before free shipping? No, free shipping overrides everything.\n\nCheck validation: Javadoc says throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. Code matches.\n\nThus likely none.\n\nReturn \"Nenhum defeito encontrado.\"",
+  "resposta_completa": {
+    "id": "chatcmpl-14677c9f-03ca-442f-9409-a522cf31f1a0",
+    "object": "chat.completion",
+    "created": 1794321698,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects vs Javadoc.\n\nSpec: Rules:\n1. Free shipping if value >= 20000 inclusive => code does that: if (valorPedido >= 20000) return 0; OK.\n2. If weight <= 1000 inclusive, fixed base tariff 1500. Code: if (pesoGramas <= 1000) return 1500; OK.\n3. Above 1000g, add base + 300 per block of 500g additional or fraction. Code: calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso divides by 500, increments for remainder, returns blocos*300. This matches rule. Edge cases: weight exactly 1001 => pesoExcedente =1 => blocos =0; remainder => blocos++ => 1 => additional=300. So total=1800. Correct.\n4. Max freight capped at 4500. Code returns Math.min(total,4500). OK.\n\nValidate: throws IllegalArgumentException if weight <=0 or value <=0. Code does that. OK.\n\nPotential defect: The method calcularFrete returns 1500 for peso<=1000 regardless of valuePedido, but rule 1 says free shipping for orders >=20000 regardless of weight. The code checks free shipping before weight check, so free shipping applies first, OK.\n\nPotential defect: The maximum cap applied after adding base and additional, but rule says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" That's applied. However, what about scenario where weight >1000 and base+additional is less than 4500 but the free shipping rule says if value>=20000, shipping is zero regardless of cap. That's fine.\n\nMaybe defect: The method calcularAdicionalPeso does not handle negative pesoExcedente (should not occur because only called when pesoGramas >1000). So okay.\n\nCheck for overflow? Not needed.\n\nEdge case: When pesoExcedente is exactly a multiple of 500, e.g., peso =1500 => excedente=500 => blocos = 500/500=1, remainder 0, not incremented, additional=300. That matches rule \"each block of 500 grams additional or fraction\". For 500 extra, it's one block. Good.\n\nEdge case: peso = 1001 => as above 300. Good.\n\nPotential defect: The Javadoc says \"valor final cobrado não pode exceder o teto de 4500 centavos\". The code caps at 4500 after adding base and additional. But what about scenario where base + additional is >4500, but free shipping rule would have set to 0? Already covered.\n\nI see no functional defect.\n\nBut maybe the specification about \"frete máximo\" could imply that the cap should apply before free shipping? No, free shipping overrides everything.\n\nCheck validation: Javadoc says throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. Code matches.\n\nThus likely none.\n\nReturn \"Nenhum defeito encontrado.\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.320698582,
+      "prompt_tokens": 1116,
+      "prompt_time": 0.169444218,
+      "completion_tokens": 656,
+      "completion_time": 1.372571179,
+      "total_tokens": 1772,
+      "total_time": 1.5420153970000001,
+      "completion_tokens_details": {
+        "reasoning_tokens": 641
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_27194a498a",
+    "x_groq": {
+      "id": "req_01m72yghvaene839e0t2gk1v6e",
+      "seed": 2007120405
+    },
+    "service_tier": "on_demand"
+  }
+}

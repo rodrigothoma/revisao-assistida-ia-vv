@@ -1,0 +1,9 @@
+1. Linhas: 26‑29  
+   Descrição: O método **calcularMedia** altera o valor de *p1* quando *p2* > *p1*, fazendo com que a nota maior seja contada duas vezes no cálculo. O Javadoc especifica que a média deve ser calculada como *(3 × p1 + 3 × p2 + 4 × trabalho) / 10* usando os valores recebidos, sem modificá‑los. Entrada que evidencia o defeito: `p1 = 50`, `p2 = 80`, `trabalho = 70` → retorno esperado 68, retorno obtido 74.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 57‑62  
+   Descrição: O método **situacao** verifica primeiro se *media* ≥ 60 e retorna **APROVADO**, antes de checar a frequência. Conforme o Javadoc, a regra de frequência < 75 % tem prioridade sobre a média e deve resultar em **REPROVADO_FREQUENCIA**, independentemente da média. Entrada que evidencia o defeito: `p1 = 90`, `p2 = 90`, `trabalho = 90`, `frequencia = 70` → deveria retornar **REPROVADO_FREQUENCIA**, mas retorna **APROVADO**.  
+   Categoria: incorreto  
+   Severidade: maior

@@ -1,0 +1,189 @@
+    /**
+    * <p>FastDateParser is a fast and thread-safe version of
+    * {@link java.text.SimpleDateFormat}.</p>
+    *
+    * <p>This class can be used as a direct replacement for
+    * <code>SimpleDateFormat</code> in most parsing situations.
+    * This class is especially useful in multi-threaded server environments.
+    * <code>SimpleDateFormat</code> is not thread-safe in any JDK version,
+    * nor will it be as Sun have closed the
+    * <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4228335">bug</a>/RFE.
+    * </p>
+    *
+    * <p>Only parsing is supported, but all patterns are compatible with
+    * SimpleDateFormat.</p>
+    *
+    * <p>Timing tests indicate this class is as about as fast as SimpleDateFormat
+    * in single thread applications and about 25% faster in multi-thread applications.</p>
+    *
+    * <p>Note that the code only handles Gregorian calendars. The following non-Gregorian
+    * calendars use SimpleDateFormat internally, and so will be slower:
+    * <ul>
+    * <li>ja_JP_TH - Japanese Imperial</li>
+    * <li>th_TH (any variant) - Thai Buddhist</li>
+    * </ul>
+    * </p>
+    * @since 3.2
+    */
+    public class FastDateParser implements DateParser, Serializable {
+
+        // ... (demais membros da classe omitidos) ...
+
+    /**
+        * Escape constant fields into regular expression
+        * @param regex The destination regex
+        * @param value The source field
+        * @param unquote If true, replace two success quotes ('') with single quote (')
+        * @return The <code>StringBuilder</code>
+        */
+        private static StringBuilder escapeRegex(StringBuilder regex, String value, boolean unquote) {
+            boolean wasWhite= false;
+            for(int i= 0; i<value.length(); ++i) {
+                char c= value.charAt(i);
+                if(Character.isWhitespace(c)) {
+                    if(!wasWhite) {
+                        wasWhite= true;
+                        regex.append("\\s*+");
+                    }
+                    continue;
+                }
+                wasWhite= false;
+                switch(c) {
+                case '\'':
+                    if(unquote) {
+                        if(++i==value.length()) {
+                            return regex;
+                        }
+                        c= value.charAt(i);
+                    }
+                    break;
+                case '?':
+                case '[':
+                case ']':
+                case '(':
+                case ')':
+                case '{':
+                case '}':
+                case '\\':
+                case '|':
+                case '*':
+                case '+':
+                case '^':
+                case '$':
+                case '.':
+                    regex.append('\\');
+                }
+                regex.append(c);
+            }
+            return regex;
+        }
+
+            // ... (demais membros da classe omitidos) ...
+
+    /**
+        * A strategy that copies the static or quoted field in the parsing pattern
+        */
+        private static class CopyQuotedStrategy implements Strategy {
+            private final String formatField;
+
+            /**
+            * Construct a Strategy that ensures the formatField has literal text
+            * @param formatField The literal text to match
+            */
+            CopyQuotedStrategy(String formatField) {
+                this.formatField= formatField;
+            }
+
+            /**
+            * {@inheritDoc}
+            */
+            @Override
+            public boolean isNumber() {
+                char c= formatField.charAt(0);
+                if(c=='\'') {
+                    c= formatField.charAt(1);
+                }
+                return Character.isDigit(c);
+            }
+
+            /**
+            * {@inheritDoc}
+            */
+            @Override
+            public boolean addRegex(FastDateParser parser, StringBuilder regex) {
+                escapeRegex(regex, formatField, true);
+                return false;
+            }
+
+            /**
+            * {@inheritDoc}
+            */
+            @Override
+            public void setCalendar(FastDateParser parser, Calendar cal, String value) {
+            }
+        }
+    }
+
+
+// ===================== TESTES =====================
+// Trechos de FastDateParserTest.
+// getInstance(padrao, fuso, local) cria um FastDateParser para o padrão informado.
+// NEW_YORK é o fuso horário America/New_York.
+
+@Test
+    public void testParseLongShort() throws ParseException {
+        Calendar cal= Calendar.getInstance(NEW_YORK, Locale.US);
+        cal.clear();
+        cal.set(2003, 1, 10, 15, 33, 20);
+        cal.set(Calendar.MILLISECOND, 989);
+        cal.setTimeZone(NEW_YORK);
+
+        DateParser fdf = getInstance("yyyy GGGG MMMM dddd aaaa EEEE HHHH mmmm ssss SSSS ZZZZ", NEW_YORK, Locale.US);
+
+        assertEquals(cal.getTime(), fdf.parse("2003 AD February 0010 PM Monday 0015 0033 0020 0989 GMT-05:00"));
+        cal.set(Calendar.ERA, GregorianCalendar.BC);
+
+        Date parse = fdf.parse("2003 BC February 0010 PM Saturday 0015 0033 0020 0989 GMT-05:00");
+                assertEquals(cal.getTime(), parse);
+
+        fdf = getInstance("y G M d a E H m s S Z", NEW_YORK, Locale.US);
+        assertEquals(cal.getTime(), fdf.parse("03 BC 2 10 PM Sat 15 33 20 989 -0500"));
+
+        cal.set(Calendar.ERA, GregorianCalendar.AD);
+        assertEquals(cal.getTime(), fdf.parse("03 AD 2 10 PM Saturday 15 33 20 989 -0500"));
+    }
+
+    @Test
+    public void testAmPm() throws ParseException {
+        Calendar cal= Calendar.getInstance(NEW_YORK, Locale.US);
+        cal.clear();
+
+        DateParser h = getInstance("yyyy-MM-dd hh a mm:ss", NEW_YORK, Locale.US);
+        DateParser K = getInstance("yyyy-MM-dd KK a mm:ss", NEW_YORK, Locale.US);
+        DateParser k = getInstance("yyyy-MM-dd kk:mm:ss", NEW_YORK, Locale.US);
+        DateParser H = getInstance("yyyy-MM-dd HH:mm:ss", NEW_YORK, Locale.US);
+
+        cal.set(2010, 7, 1, 0, 33, 20);
+        assertEquals(cal.getTime(), h.parse("2010-08-01 12 AM 33:20"));
+        assertEquals(cal.getTime(), K.parse("2010-08-01 0 AM 33:20"));
+        assertEquals(cal.getTime(), k.parse("2010-08-01 00:33:20"));
+        assertEquals(cal.getTime(), H.parse("2010-08-01 00:33:20"));
+
+        cal.set(2010, 7, 1, 3, 33, 20);
+        assertEquals(cal.getTime(), h.parse("2010-08-01 3 AM 33:20"));
+        assertEquals(cal.getTime(), K.parse("2010-08-01 3 AM 33:20"));
+        assertEquals(cal.getTime(), k.parse("2010-08-01 03:33:20"));
+        assertEquals(cal.getTime(), H.parse("2010-08-01 03:33:20"));
+
+        cal.set(2010, 7, 1, 15, 33, 20);
+        assertEquals(cal.getTime(), h.parse("2010-08-01 3 PM 33:20"));
+        assertEquals(cal.getTime(), K.parse("2010-08-01 3 PM 33:20"));
+        assertEquals(cal.getTime(), k.parse("2010-08-01 15:33:20"));
+        assertEquals(cal.getTime(), H.parse("2010-08-01 15:33:20"));
+
+        cal.set(2010, 7, 1, 12, 33, 20);
+        assertEquals(cal.getTime(), h.parse("2010-08-01 12 PM 33:20"));
+        assertEquals(cal.getTime(), K.parse("2010-08-01 0 PM 33:20"));
+        assertEquals(cal.getTime(), k.parse("2010-08-01 12:33:20"));
+        assertEquals(cal.getTime(), H.parse("2010-08-01 12:33:20"));
+    }

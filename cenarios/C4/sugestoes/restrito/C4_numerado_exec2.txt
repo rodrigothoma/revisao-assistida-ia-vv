@@ -1,0 +1,9 @@
+1. Linhas: 58  
+   Descrição: Para atrasos a partir de 4 dias o cálculo do valor base usa a fórmula `(3 * 200) + (diasAtraso * 350)`, que cobra 350 centavos por **todos** os dias em atraso. O Javadoc especifica que apenas os dias **adicionais** (a partir do quarto) devem ser cobrados a 350 centavos, ou seja, a fórmula correta seria `(3 * 200) + ((diasAtraso - 3) * 350)`. Entrada que provoca o erro: `diasAtraso = 5` (resultado esperado 3*200 + 2*350 = 1300 centavos, o código devolve 3*200 + 5*350 = 2050 centavos).  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 70‑71  
+   Descrição: Quando o exemplar é de reserva técnica o método `aplicarRegraReserva` retorna `(valorBase * 2) + 500`, adicionando 500 centavos ao total. O Javadoc indica apenas a multiplicação por 2, sem nenhum acréscimo adicional. Entrada que provoca o erro: `valorBase = 600` e `ehExemplarReserva = true` (resultado esperado 1200 centavos, o código devolve 1700 centavos).  
+   Categoria: incorreto  
+   Severidade: maior

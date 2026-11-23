@@ -1,0 +1,21 @@
+revisor,formulario,apontamento,alegacao,linhas,classe,defeito,justificativa
+R1,C1-H,1,1,49,VP,D1,"minutos < 15 contra ""até 15, inclusive"" (regra 1)"
+R1,C1-H,2,1,34-37,VP,D2,teto de 3000 não imposto (regra 4)
+R1,C2-L1,1,1,57-62,VP,D1,média testada antes da frequência (prioridade da regra 1)
+R1,C3-H,1,1,30,VP,D1,"> 20000 contra ""a partir de 20000"" (regra 1)"
+R1,C4-L2,1,1,70,VP,D2,+500 não previsto na regra 3
+R2,C2-H,1,1,56-61,VP,D1,frequência avaliada depois da média
+R2,C1-L2,1,1,34-38,VP,D2,teto de 3000 não imposto
+R2,C4-H,1,1,70,VP,D2,+500 não previsto na regra 3
+R2,C3-L1,1,1,30-31,VP,D1,"> 20000 contra ""a partir de 20000"" (categoria marcada como Ausente; categoria não entra na regra de correspondência)"
+R2,C3-L1,2,1,38-39,VP,D2,teto de 4500 não imposto (origem: própria)
+R3,C3-L2,1,1,30,VP,D1,"comparador > contra ""20000 inclusive"""
+R3,C3-L2,1,2,36;38,FP,,subtração negativa: impossível nesse ponto (pesoGramas > 1000)
+R3,C3-L2,1,3,63,FP,,resto da divisão: a regra de fração de 500 g está correta
+R3,C4-H,1,1,58,VP,D1,dias iniciais não subtraídos (regra 2)
+R3,C2-H,1,1,26-27,VP,D2,substituição da P1 não prevista na fórmula
+R3,C2-H,1,2,57;60;63,VP,D1,média comparada sem considerar antes a frequência
+R4,C4-L1,1,1,54-59,VP,D1,350 aplicado a todos os dias (regra 2)
+R4,C3-H,1,1,63-70,FP,,regra de fração de 500 g apontada como errada; está correta
+R4,C2-L2,1,1,22-30,VP,D2,usa a P2 no lugar da P1
+R4,C1-H,1,1,49-50,VP,D1,"minutos < 15 contra ""15 inclusive"""

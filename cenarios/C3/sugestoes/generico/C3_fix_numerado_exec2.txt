@@ -1,0 +1,9 @@
+1. Linhas: 30,33,36,38,39,64‑68  
+   Descrição: O código utiliza números mágicos (20000, 1500, 1000, 500, 300, 4500) espalhados pelas regras de negócio. Isso dificulta a manutenção e a compreensão, pois qualquer alteração nas regras exige buscar e modificar vários trechos.  
+   Categoria: excedente (deveria ser substituído por constantes nomeadas).  
+   Severidade: menor.
+
+2. Linhas: 63‑68  
+   Descrição: O método `calcularAdicionalPeso` assume que `pesoExcedente` é sempre positivo. Caso ele receba um valor negativo (por exemplo, se a validação anterior for alterada ou removida), o cálculo produzirá blocos negativos e, consequentemente, um valor de adicional negativo, resultando em um frete incorreto.  
+   Categoria: ausente (faltam validações para garantir que `pesoExcedente` não seja negativo).  
+   Severidade: menor.

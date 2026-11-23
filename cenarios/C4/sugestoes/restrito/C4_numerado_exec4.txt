@@ -1,0 +1,9 @@
+1. Linhas: 55‑58  
+   Descrição: Para atraso a partir de 4 dias o cálculo deve ser (3 × 200) + (diasAtraso − 3) × 350 centavos. O código usa `return (3 * 200) + (diasAtraso * 350);`, contabilizando 350 centavos também nos primeiros 3 dias, resultando em valor maior que o especificado. Ex.: diasAtraso = 4 deveria gerar 200 × 3 + 350 × 1 = 950, mas o método devolve 3 × 200 + 4 × 350 = 1 300.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 68‑71  
+   Descrição: Quando o exemplar é de reserva técnica o Javadoc indica que o valor total da multa calculada deve ser multiplicado por 2. O método `aplicarRegraReserva` retorna `(valorBase * 2) + 500`, acrescentando 500 centavos indevidamente. Ex.: valorBase = 600, reserva = true deve resultar em 1 200, mas o método devolve 1 700.  
+   Categoria: incorreto  
+   Severidade: maior

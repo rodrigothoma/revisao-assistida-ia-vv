@@ -1,0 +1,11 @@
+1.
+Linhas: 35-40
+Descrição: O método random(int, String) não valida se a string chars é vazia e não lança IllegalArgumentException quando ela não contém caracteres. Para a entrada chars = "", o método retorna uma string vazia se count == 0 ou lança ArrayIndexOutOfBoundsException se count > 0, divergindo do especificado no Javadoc.
+Categoria: ausente
+Severidade: maior
+
+2.
+Linhas: 96-100
+Descrição: O método random(int, int, int, boolean, boolean, char[], Random) não verifica se o array chars está vazio quando este não é nulo. Para a entrada chars = new char[0], o método retorna uma string vazia se count == 0 ou lança ArrayIndexOutOfBoundsException se count > 0, deixando de lançar IllegalArgumentException conforme exigido pelo Javadoc.
+Categoria: ausente
+Severidade: maior

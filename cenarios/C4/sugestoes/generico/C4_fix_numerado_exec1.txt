@@ -1,0 +1,19 @@
+1. Linhas: 39‑46  
+   Descrição: O método **validarDiasAtraso** lança `IllegalArgumentException`, porém seu Javadoc não contém a tag `@throws` descrevendo a exceção lançada.  
+   Categoria: ausente  
+   Severidade: menor  
+
+2. Linhas: 54‑59  
+   Descrição: O cálculo do valor base utiliza números mágicos (200, 350 e 3) sem definição de constantes nomeadas, dificultando a manutenção e a compreensão das regras de negócio.  
+   Categoria: ausente  
+   Severidade: menor  
+
+3. Linhas: 68‑73  
+   Descrição: O método **aplicarRegraReserva** não depende de nenhum estado da instância e, portanto, poderia ser declarado como `static`. Manter como método de instância gera código desnecessário.  
+   Categoria: ausente  
+   Severidade: menor  
+
+4. Linha: 5  
+   Descrição: A classe **CalculadoraMulta** está no pacote padrão (não há declaração `package`). Isso pode causar conflitos de nome em projetos maiores e impede a organização adequada do código.  
+   Categoria: ausente  
+   Severidade: menor

@@ -1,0 +1,70 @@
+ 1 | /**
+ 2 |  * Calcula o frete de pedidos de uma loja virtual.
+ 3 |  * Todos os valores são expressos em centavos de real.
+ 4 |  */
+ 5 | public class CalculadoraFrete {
+ 6 | 
+ 7 |     /**
+ 8 |      * Calcula o valor do frete de um pedido com base no peso e no valor dos produtos.
+ 9 |      *
+10 |      * <p>Regras:</p>
+11 |      * <ol>
+12 |      *   <li>Promoção de frete grátis: pedidos com valor a partir de 20000 centavos,
+13 |      *       inclusive, têm tarifa zero.</li>
+14 |      *   <li>Pedidos com peso de até 1000 gramas, inclusive, pagam a tarifa fixa
+15 |      *       base de 1500 centavos.</li>
+16 |      *   <li>Acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para
+17 |      *       cada bloco de 500 gramas adicionais ou fração.</li>
+18 |      *   <li>Garantia de frete máximo: o valor final cobrado não pode exceder
+19 |      *       o teto de 4500 centavos.</li>
+20 |      * </ol>
+21 |      *
+22 |      * @param pesoGramas peso total dos produtos, em gramas
+23 |      * @param valorPedido valor total dos produtos, em centavos
+24 |      * @return o valor do frete a ser cobrado, em centavos
+25 |      * @throws IllegalArgumentException se {@code pesoGramas} for menor ou igual a zero
+26 |      *         ou {@code valorPedido} for menor ou igual a zero
+27 |      */
+28 |     public int calcularFrete(int pesoGramas, int valorPedido) {
+29 |         validarDadosPedido(pesoGramas, valorPedido);
+30 |         if (valorPedido > 20000) {
+31 |             return 0;
+32 |         }
+33 |         if (pesoGramas <= 1000) {
+34 |             return 1500;
+35 |         }
+36 |         int pesoExcedente = pesoGramas - 1000;
+37 |         int adicional = calcularAdicionalPeso(pesoExcedente);
+38 |         int total = 1500 + adicional;
+39 |         return total;
+40 |     }
+41 | 
+42 |     /**
+43 |      * Valida se os parâmetros de entrada do pedido são válidos.
+44 |      *
+45 |      * @param pesoGramas peso em gramas
+46 |      * @param valorPedido valor do pedido em centavos
+47 |      */
+48 |     private void validarDadosPedido(int pesoGramas, int valorPedido) {
+49 |         if (pesoGramas <= 0) {
+50 |             throw new IllegalArgumentException("Peso deve ser maior que zero.");
+51 |         }
+52 |         if (valorPedido <= 0) {
+53 |             throw new IllegalArgumentException("Valor do pedido deve ser maior que zero.");
+54 |         }
+55 |     }
+56 | 
+57 |     /**
+58 |      * Calcula o valor adicional cobrado pelo excesso de peso além de 1000 gramas.
+59 |      *
+60 |      * @param pesoExcedente peso excedente em gramas
+61 |      * @return o valor adicional em centavos
+62 |      */
+63 |     private int calcularAdicionalPeso(int pesoExcedente) {
+64 |         int blocos = pesoExcedente / 500;
+65 |         if (pesoExcedente % 500 != 0) {
+66 |             blocos++;
+67 |         }
+68 |         return blocos * 300;
+69 |     }
+70 | }

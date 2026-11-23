@@ -1,0 +1,11 @@
+1.
+Linhas: 35-40
+Descrição: O método não valida se o parâmetro chars é uma string vazia e não lança IllegalArgumentException quando chars é vazio, contrariando a especificação do Javadoc. Por exemplo, a chamada random(0, "") retorna uma string vazia e random(1, "") lança ArrayIndexOutOfBoundsException, quando em ambos os casos deveria ser lançada IllegalArgumentException.
+Categoria: ausente
+Severidade: maior
+
+2.
+Linhas: 96-101
+Descrição: O método não valida se o array chars é vazio e não lança IllegalArgumentException quando chars não é nulo e possui tamanho zero, contrariando a especificação do Javadoc. Por exemplo, a chamada random(0, 0, 0, false, false, new char[0], new Random()) retorna uma string vazia e random(1, 0, 0, false, false, new char[0], new Random()) lança ArrayIndexOutOfBoundsException, quando em ambos os casos deveria ser lançada IllegalArgumentException.
+Categoria: ausente
+Severidade: maior

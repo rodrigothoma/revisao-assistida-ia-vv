@@ -1,0 +1,67 @@
+{
+  "unidade": "C3_numerado.txt",
+  "execucao": 5,
+  "data_hora": "2026-11-10T11:40:30",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_8655ddce88",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.207857718,
+    "prompt_tokens": 1110,
+    "prompt_time": 0.008323676,
+    "completion_tokens": 855,
+    "completion_time": 2.405329307,
+    "total_tokens": 1965,
+    "total_time": 2.413652983,
+    "prompt_tokens_details": {
+      "cached_tokens": 1024
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 626
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects vs Javadoc.\n\nCheck spec: Javadoc says:\n\n- Promotion free shipping: orders with value starting from 20000 centavos inclusive have tariff zero.\n- In code: line 30: if (valorPedido > 20000) return 0; Should be >= 20000, not >. So for exactly 20000, should be free but code charges. That's a defect: condition incorrect (excessivo). Category: incorreto. Severity: maior (affects behavior). Defect at line 30-31.\n\n- Max freight guarantee: final value cannot exceed 4500 centavos. Code does not enforce max cap; returns total possibly >4500. For example weight 3000g (excess 2000 => blocos = 4 => adicional=1200) total = 1500+1200=2700 (<4500). Need a case >4500: Let's compute weight large: e.g., pesoGramas = 10000. Exceed = 9000 -> blocos = 9000/500=18, remainder 0, additional = 18*300=5400; total = 1500+5400 = 6900 > 4500. Code returns 6900, violates cap. So missing max cap. That's a functional defect: missing logic. Category: ausente (missing). Severity: maior.\n\nAny other issues? Check condition for free shipping: also inclusive of 20000. Already identified. Also note that free shipping applies regardless of weight, correct.\n\nCheck validation: throws IllegalArgumentException if peso <=0 or valorPedido <=0. That's correct per Javadoc.\n\nCheck additional calculation: It uses integer division and rounds up for any remainder, matches \"cada bloco de 500 gramas adicionais ou fração\". Good.\n\nBut note that calculation of additional: for pesoExcedente = 0? Not used because weight>1000 triggers, so pesoExcedente >=1. For 1001, pesoExcedente=1, blocos=0 (int division), remainder non-zero, blocos++ => 1; additional=300. So correct.\n\nPotential off-by-one: The rule: \"Acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" So for 1001-1500 inclusive should be 1 block (300). Code matches.\n\nNow free shipping condition also should be >=20000 inclusive. Code uses >. Defect.\n\nAlso need to cap total at 4500. Not implemented.\n\nThus two defects.\n\nProvide output as per format: each defect numbered, lines, description, category, severity.\n\nLines: for first defect lines 30-31. For second defect lines 38-39 maybe also need to mention missing cap, which would be after total computed at line 39, before return. So lines 38-39.\n\nProvide description with example input.\n\nNow craft final answer in Portuguese, plain text.",
+  "resposta_completa": {
+    "id": "chatcmpl-c48ca2f4-9b02-4f8b-8e93-6f74f151e476",
+    "object": "chat.completion",
+    "created": 1794321632,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 30‑31  \n   Descrição: O frete grátis deve ser concedido para pedidos com valor **igual ou superior a** 20000 centavos, conforme o Javadoc. O código retorna 0 somente quando `valorPedido > 20000`, portanto pedidos com valor exatamente 20000 centavos são cobrados erroneamente. Exemplo: `calcularFrete(500, 20000)` deve retornar 0, mas retorna 1500.  \n   Categoria: incorreto  \n   Severidade: maior  \n\n2. Linhas: 38‑39  \n   Descrição: O Javadoc estabelece que o valor final do frete não pode exceder 4500 centavos. O código calcula `total = 1500 + adicional` e o devolve sem aplicar esse teto, permitindo valores superiores a 4500. Exemplo: `calcularFrete(10000, 15000)` resulta em 6900 centavos, violando a regra do teto.  \n   Categoria: ausente  \n   Severidade: maior",
+          "reasoning": "We need to find functional defects vs Javadoc.\n\nCheck spec: Javadoc says:\n\n- Promotion free shipping: orders with value starting from 20000 centavos inclusive have tariff zero.\n- In code: line 30: if (valorPedido > 20000) return 0; Should be >= 20000, not >. So for exactly 20000, should be free but code charges. That's a defect: condition incorrect (excessivo). Category: incorreto. Severity: maior (affects behavior). Defect at line 30-31.\n\n- Max freight guarantee: final value cannot exceed 4500 centavos. Code does not enforce max cap; returns total possibly >4500. For example weight 3000g (excess 2000 => blocos = 4 => adicional=1200) total = 1500+1200=2700 (<4500). Need a case >4500: Let's compute weight large: e.g., pesoGramas = 10000. Exceed = 9000 -> blocos = 9000/500=18, remainder 0, additional = 18*300=5400; total = 1500+5400 = 6900 > 4500. Code returns 6900, violates cap. So missing max cap. That's a functional defect: missing logic. Category: ausente (missing). Severity: maior.\n\nAny other issues? Check condition for free shipping: also inclusive of 20000. Already identified. Also note that free shipping applies regardless of weight, correct.\n\nCheck validation: throws IllegalArgumentException if peso <=0 or valorPedido <=0. That's correct per Javadoc.\n\nCheck additional calculation: It uses integer division and rounds up for any remainder, matches \"cada bloco de 500 gramas adicionais ou fração\". Good.\n\nBut note that calculation of additional: for pesoExcedente = 0? Not used because weight>1000 triggers, so pesoExcedente >=1. For 1001, pesoExcedente=1, blocos=0 (int division), remainder non-zero, blocos++ => 1; additional=300. So correct.\n\nPotential off-by-one: The rule: \"Acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" So for 1001-1500 inclusive should be 1 block (300). Code matches.\n\nNow free shipping condition also should be >=20000 inclusive. Code uses >. Defect.\n\nAlso need to cap total at 4500. Not implemented.\n\nThus two defects.\n\nProvide output as per format: each defect numbered, lines, description, category, severity.\n\nLines: for first defect lines 30-31. For second defect lines 38-39 maybe also need to mention missing cap, which would be after total computed at line 39, before return. So lines 38-39.\n\nProvide description with example input.\n\nNow craft final answer in Portuguese, plain text."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.207857718,
+      "prompt_tokens": 1110,
+      "prompt_time": 0.008323676,
+      "completion_tokens": 855,
+      "completion_time": 2.405329307,
+      "total_tokens": 1965,
+      "total_time": 2.413652983,
+      "prompt_tokens_details": {
+        "cached_tokens": 1024
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 626
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_8655ddce88",
+    "x_groq": {
+      "id": "req_01m72yeh20e3a849xce6wxg63g",
+      "seed": 1541903795
+    },
+    "service_tier": "on_demand"
+  }
+}

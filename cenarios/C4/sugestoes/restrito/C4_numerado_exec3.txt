@@ -1,0 +1,9 @@
+1. Linhas: 58  
+   Descrição: O cálculo do valor base para atrasos superiores a 3 dias está incorreto. O método usa `diasAtraso * 350`, o que resulta em cobrar 350 centavos por **todos** os dias, ao invés de apenas pelos dias excedentes aos primeiros 3. Exemplo: para `diasAtraso = 4` e `ehExemplarReserva = false`, o método devolve 2000 centavos, enquanto o Javadoc especifica 950 centavos (3 × 200 + 1 × 350).  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 70  
+   Descrição: Ao aplicar a regra de reserva técnica, o método adiciona 500 centavos ao valor já multiplicado por 2, embora o Javadoc indique apenas a multiplicação por 2. Exemplo: para `diasAtraso = 2` e `ehExemplarReserva = true`, o valor base é 400 centavos; o esperado é 800 centavos, porém o método devolve 1300 centavos (400 × 2 + 500).  
+   Categoria: excedente  
+   Severidade: maior

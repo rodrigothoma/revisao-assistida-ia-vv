@@ -1,0 +1,4 @@
+1. Linhas: 70‑71  
+   Descrição: O Javadoc de `horasAdicionais` especifica que o parâmetro `minutosExcedentes` deve ser **maior que zero**, porém o método aceita zero (ou valores negativos) e simplesmente calcula `(minutosExcedentes + 59) / 60`, retornando 0 para zero e um valor inesperado para negativos. Não há validação que impeça usos fora do contrato descrito, o que pode levar a resultados incorretos caso o método seja chamado inadvertidamente com valores inválidos.  
+   Categoria: ausente (falta de validação do parâmetro)  
+   Severidade: menor (não afeta o fluxo atual da classe, mas viola a especificação do contrato).

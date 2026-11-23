@@ -1,0 +1,73 @@
+ 1 | /**
+ 2 |  * Calcula a tarifa do estacionamento de um shopping.
+ 3 |  * Todos os valores são em centavos (800 significa R$ 8,00).
+ 4 |  */
+ 5 | public class CalculadoraEstacionamento {
+ 6 | 
+ 7 |     private static final int TARIFA_PRIMEIRA_HORA = 800;
+ 8 |     private static final int TARIFA_HORA_ADICIONAL = 300;
+ 9 |     private static final int TARIFA_MAXIMA = 3000;
+10 | 
+11 |     /**
+12 |      * Calcula a tarifa a pagar por uma permanência.
+13 |      *
+14 |      * <p>Regras:</p>
+15 |      * <ol>
+16 |      *   <li>Permanências de até 15 minutos, inclusive, são gratuitas.</li>
+17 |      *   <li>Acima de 15 e até 60 minutos, inclusive, a tarifa é 800.</li>
+18 |      *   <li>Acima de 60 minutos, a tarifa é 800 mais 300 por hora adicional
+19 |      *       ou fração de hora.</li>
+20 |      *   <li>A tarifa de uma permanência nunca passa de 3000.</li>
+21 |      *   <li>Ticket validado por loja parceira paga metade da tarifa,
+22 |      *       arredondada para baixo. O desconto é aplicado depois do
+23 |      *       limite da regra 4.</li>
+24 |      * </ol>
+25 |      *
+26 |      * @param minutos  tempo de permanência, em minutos
+27 |      * @param validado {@code true} se o ticket foi validado por loja parceira
+28 |      * @return a tarifa, em centavos
+29 |      * @throws IllegalArgumentException se {@code minutos} for negativo
+30 |      */
+31 |     public int calcularTarifa(int minutos, boolean validado) {
+32 |         if (minutos < 0) {
+33 |             throw new IllegalArgumentException("minutos negativo: " + minutos);
+34 |         }
+35 |         int tarifa = tarifaPorTempo(minutos);
+36 |         if (tarifa > TARIFA_MAXIMA) {
+37 |             tarifa = TARIFA_MAXIMA;
+38 |         }
+39 |         if (validado) {
+40 |             tarifa = tarifa / 2;
+41 |         }
+42 |         return tarifa;
+43 |     }
+44 | 
+45 |     /**
+46 |      * Calcula a tarifa pelas regras 1 a 3 de
+47 |      * {@link #calcularTarifa(int, boolean)}, sem limite e sem desconto.
+48 |      *
+49 |      * @param minutos tempo de permanência, em minutos, não negativo
+50 |      * @return a tarifa, em centavos
+51 |      */
+52 |     private int tarifaPorTempo(int minutos) {
+53 |         if (minutos <= 15) {
+54 |             return 0;
+55 |         }
+56 |         if (minutos <= 60) {
+57 |             return TARIFA_PRIMEIRA_HORA;
+58 |         }
+59 |         int horas = horasAdicionais(minutos - 60);
+60 |         return TARIFA_PRIMEIRA_HORA + horas * TARIFA_HORA_ADICIONAL;
+61 |     }
+62 | 
+63 |     /**
+64 |      * Converte os minutos além da primeira hora em horas adicionais,
+65 |      * contando a fração de hora como hora inteira.
+66 |      *
+67 |      * @param minutosExcedentes minutos além da primeira hora, maior que zero
+68 |      * @return o número de horas adicionais
+69 |      */
+70 |     private int horasAdicionais(int minutosExcedentes) {
+71 |         return (minutosExcedentes + 59) / 60;
+72 |     }
+73 | }

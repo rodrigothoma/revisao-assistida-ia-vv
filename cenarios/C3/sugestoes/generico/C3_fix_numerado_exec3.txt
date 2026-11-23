@@ -1,0 +1,14 @@
+1. Linhas: 5, 28, 30, 33, 36, 38, 39, 63, 64, 68  
+   Descrição: Uso de valores “mágicos” (20000, 1500, 500, 300, 4500) espalhados pelo código. Caso algum valor de regra precise ser alterado, o risco de esquecer alguma ocorrência aumenta e dificulta a manutenção.  
+   Categoria: ausente (deveria haver constantes nomeadas, por ex.: LIMITE_GRATIS, TARIFA_BASE, BLOCO_PESO, VALOR_BLOCO, TETO_MAXIMO).  
+   Severidade: menor.
+
+2. Linhas: 64, 68  
+   Descrição: O cálculo `blocos * 300` pode gerar overflow de `int` se `pesoExcedente` for muito grande (por exemplo, peso de 2 147 483 647 g). Embora situações reais provavelmente não atinjam esse valor, a falta de proteção pode levar a resultado negativo ou incorreto.  
+   Categoria: ausente (não há verificação de overflow ou uso de tipo maior).  
+   Severidade: menor.
+
+3. Linhas: 48‑55, 63‑69  
+   Descrição: Os métodos `validarDadosPedido` e `calcularAdicionalPeso` não precisam acessar estado da instância; poderiam ser declarados `static`. Mantê‑los como instância não causa erro, mas indica oportunidade de melhorar a clareza e evitar a necessidade de criar objetos desnecessários.  
+   Categoria: excedente (declaração de método de instância onde o `static` seria mais adequado).  
+   Severidade: menor.

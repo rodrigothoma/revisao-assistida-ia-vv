@@ -1,0 +1,11 @@
+1. Defeito
+Linhas: 53-58
+Descrição: O Javadoc de escapeRegex especifica que, se unquote for verdadeiro, duas aspas sucessivas ('') devem ser substituidas por uma aspa simples ('). No entanto, o codigo nao verifica se o caractere seguinte a aspa simples encontrada tambem e uma aspa simples. Ao encontrar uma aspa simples com unquote igual a true, o metodo incrementa incondicionalmente o indice, descartando a aspa simples e consumindo o caractere seguinte (ou retornando se for o fim da string). Por exemplo, para value = "a'b" e unquote = true, a aspa simples isolada e removida e o metodo produz "ab". Do mesmo modo, para uma sequencia de quatro aspas consecutivas (value = "''''"), sao produzidas duas aspas simples ("''") em vez de uma ("'").
+Categoria: incorreto
+Severidade: maior
+
+2. Defeito
+Linhas: 57-59
+Descrição: Ao obter o caractere seguinte a uma aspa simples quando unquote e true (linha 57), o switch e interrompido com break (linha 59) sem verificar se o novo caractere c e um metacaractere de expressao regular (como ?, [, ], (, ), {, }, \, |, *, +, ^, $, .). Dessa forma, qualquer metacaractere que venha logo apos uma aspa simples e anexado ao regex sem a barra invertida de escape. Isso diverge da especificacao do metodo escapeRegex ("Escape constant fields into regular expression") e da compatibilidade com SimpleDateFormat prometida no Javadoc da classe. Por exemplo, a utilizacao de um padrao como "yyyy'?'MM" ou "yyyy'('MM')'dd" gera uma expressao regular invalida, lancando PatternSyntaxException na compilacao do padrao, e "yyyy'.'MM" faz com que o ponto case qualquer caractere em vez do caractere literal.
+Categoria: incorreto
+Severidade: maior

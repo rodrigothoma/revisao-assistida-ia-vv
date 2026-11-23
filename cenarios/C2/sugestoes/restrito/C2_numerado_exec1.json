@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_numerado.txt",
+  "execucao": 1,
+  "data_hora": "2026-11-10T01:38:52",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_8655ddce88",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.207902029,
+    "prompt_tokens": 1277,
+    "prompt_time": 0.069985928,
+    "completion_tokens": 822,
+    "completion_time": 1.7125476530000001,
+    "total_tokens": 2099,
+    "total_time": 1.782533581,
+    "completion_tokens_details": {
+      "reasoning_tokens": 473
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects: code behavior diverges from Javadoc.\n\nFirst method calcularMedia: Javadoc says average = (3*p1 + 3*p2 + 4*trabalho)/10 with integer division. Also says throws IllegalArgumentException if any note out of 0..100. The code validates notes. Then it has if (p2 > p1) { p1 = p2; }. This swaps or sets p1 to p2 when p2 > p1, effectively making p1 the max of the two. This changes the calculation: it uses larger of the two for the weight of p1 (3 weight) but still also includes p2 weight 3. This is not in spec. So it's a functional defect: \"incorreto\" (behavior deviates). Category: incorreto. Severity: maior because average wrong. Lines 26-28 cause.\n\nSecond method situacao: spec priority list: 1) Frequency <75 => REPROVADO_FREQUENCIA, any media. 2) Media >=60 => APROVADO. 3) Media 40-59 => EXAME. 4) Media <40 => REPROVADO.\n\nImplementation: first check frequency range (valid). Then int media = calcularMedia(...). Then if (media >= 60) return APROVADO; then if (frequencia < 75) return REPROVADO_FREQUENCIA; Then if (media >= 40) return EXAME; else REPROVADO.\n\nProblem: priority order wrong: they check media >=60 before checking frequency. According to spec, frequency <75 should dominate regardless of media. So a student with frequency 70 and media 80 should be REPROVADO_FREQUENCIA, but code returns APROVADO. So defect: incorrect ordering. Lines 57-62. Category incorreto, severity maior.\n\nAlso note that they don't validate p1,p2,trabalho in situacao. However calcularMedia validates them, so fine.\n\nAny other defect? Also the calculation of media includes swapped p1 which already flagged.\n\nPotential other defect: they validate frequency but not validate that media calculation may throw IllegalArgumentException for notes out of range. That's fine.\n\nThus two defects.\n\nProvide output in Portuguese, simple text.\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-dcf043b6-5370-4337-9e2d-e37f090c2587",
+    "object": "chat.completion",
+    "created": 1794285552,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 26‑28  \n   Descrição: O método `calcularMedia` altera o valor de `p1` quando `p2 > p1`, fazendo com que a média seja calculada usando o maior valor entre as duas provas no peso de 3, o que difere da fórmula especificada no Javadoc `(3 × p1 + 3 × p2 + 4 × trabalho) / 10`. Por exemplo, para p1=50, p2=80, trabalho=70 a média deveria ser (150+240+280)/10 = 67, mas o código devolve (240+150+280)/10 = 67 (mesmo valor neste caso), porém em outros combos (ex.: p1=30, p2=90, trabalho=50) a média correta seria 63, enquanto o código retorna (270+90+200)/10 = 56.  \n   Categoria: incorreto  \n   Severidade: maior  \n\n2. Linhas: 57‑62  \n   Descrição: O método `situacao` verifica primeiro se a média é maior ou igual a 60 e devolve `APROVADO`, antes de checar a frequência. Conforme a especificação, a frequência abaixo de 75 % tem prioridade e deve resultar em `REPROVADO_FREQUENCIA`, independentemente da média. Assim, para frequência=70 e notas que geram média=80, o método retorna `APROVADO` em vez de `REPROVADO_FREQUENCIA`.  \n   Categoria: incorreto  \n   Severidade: maior",
+          "reasoning": "We need to find functional defects: code behavior diverges from Javadoc.\n\nFirst method calcularMedia: Javadoc says average = (3*p1 + 3*p2 + 4*trabalho)/10 with integer division. Also says throws IllegalArgumentException if any note out of 0..100. The code validates notes. Then it has if (p2 > p1) { p1 = p2; }. This swaps or sets p1 to p2 when p2 > p1, effectively making p1 the max of the two. This changes the calculation: it uses larger of the two for the weight of p1 (3 weight) but still also includes p2 weight 3. This is not in spec. So it's a functional defect: \"incorreto\" (behavior deviates). Category: incorreto. Severity: maior because average wrong. Lines 26-28 cause.\n\nSecond method situacao: spec priority list: 1) Frequency <75 => REPROVADO_FREQUENCIA, any media. 2) Media >=60 => APROVADO. 3) Media 40-59 => EXAME. 4) Media <40 => REPROVADO.\n\nImplementation: first check frequency range (valid). Then int media = calcularMedia(...). Then if (media >= 60) return APROVADO; then if (frequencia < 75) return REPROVADO_FREQUENCIA; Then if (media >= 40) return EXAME; else REPROVADO.\n\nProblem: priority order wrong: they check media >=60 before checking frequency. According to spec, frequency <75 should dominate regardless of media. So a student with frequency 70 and media 80 should be REPROVADO_FREQUENCIA, but code returns APROVADO. So defect: incorrect ordering. Lines 57-62. Category incorreto, severity maior.\n\nAlso note that they don't validate p1,p2,trabalho in situacao. However calcularMedia validates them, so fine.\n\nAny other defect? Also the calculation of media includes swapped p1 which already flagged.\n\nPotential other defect: they validate frequency but not validate that media calculation may throw IllegalArgumentException for notes out of range. That's fine.\n\nThus two defects.\n\nProvide output in Portuguese, simple text.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.207902029,
+      "prompt_tokens": 1277,
+      "prompt_time": 0.069985928,
+      "completion_tokens": 822,
+      "completion_time": 1.7125476530000001,
+      "total_tokens": 2099,
+      "total_time": 1.782533581,
+      "completion_tokens_details": {
+        "reasoning_tokens": 473
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_8655ddce88",
+    "x_groq": {
+      "id": "req_01m71w1esxedyaa6bbkf0p6v1p",
+      "seed": 185650221
+    },
+    "service_tier": "on_demand"
+  }
+}

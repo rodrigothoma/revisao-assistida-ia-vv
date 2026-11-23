@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_fix_numerado.txt",
+  "execucao": 4,
+  "data_hora": "2026-11-10T11:42:30",
+  "prompt": "prompt_generico.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_69334c0be3",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.312570928,
+    "prompt_tokens": 1058,
+    "prompt_time": 0.058546565,
+    "completion_tokens": 1095,
+    "completion_time": 2.309758021,
+    "total_tokens": 2153,
+    "total_time": 2.368304586,
+    "completion_tokens_details": {
+      "reasoning_tokens": 1030
+    }
+  },
+  "raciocinio_modelo": "We need to review code, list problems with line numbers, description, category (ausente, incorreto ou excedente), severity (maior, menor). Check Javadoc vs implementation, edge cases, potential bugs.\n\nLet's analyze:\n\n- Javadoc says promotion free shipping for orders with value >=20000 centavos inclusive. Implementation returns 0 if valorPedido >=20000. Good.\n\n- For weight up to 1000 grams inclusive, tarifa base 1500. Implementation returns 1500 for pesoGramas <=1000. Good.\n\n- For above 1000, add 300 per 500g block or fraction. Implementation: pesoExcedente = pesoGramas - 1000; calcularAdicionalPeso computes blocos = pesoExcedente/500; if remainder !=0 then blocos++; return blocos*300. That matches rule.\n\n- Max freight 4500: return Math.min(total, 4500). Good.\n\nPotential issues:\n\n1. validarDadosPedido throws IllegalArgumentException if weight <=0 or value <=0. Javadoc for calcularFrete says throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. That matches.\n\n2. Edge case: pesoGramas negative is caught. Good.\n\n3. However, calculation of adicional when pesoExcedente is 0? Not possible because weight >1000 leads to >0. If pesoExcedente=0, blocos=0, remainder 0, returns 0. But not used.\n\n4. Potential overflow? int range is fine for centavos.\n\n5. Javadoc for calcularFrete says return value in centavos. Good.\n\n6. Potential issue: When pesoGramas is extremely large, calcularAdicionalPeso may overflow int when multiplied by 300. But unlikely. Might be considered.\n\n7. The method validarDadosPedido is private but Javadoc says \"Valida se os parâmetros de entrada do pedido são válidos.\" fine.\n\n8. Category: maybe missing @throws in validarDadosPedido Javadoc, but not required. But Javadoc for validarDadosPedido does not document that it can throw IllegalArgumentException. Could be considered missing documentation (ausente). However the instruction says \"para cada problema, informe ... Categoria: ausente, incorreto ou excedente\". So if something is missing (ausente). So missing @throws in validarDadosPedido Javadoc is a problem: Javadoc missing @throws tag for IllegalArgumentException.\n\n9. Also, Javadoc for class says \"Calcula o frete...\" but class name is CalculadoraFrete; fine.\n\n10. Another potential issue: The class does not handle null (not applicable). No.\n\n11. The method calcularFrete returns int; fine.\n\n12. The method calcularAdicionalPeso could be static, but not required.\n\n13. In Javadoc of calcularFrete, the description of rule 2 says \"Pedidos com peso de até 1000 gramas, inclusive, pagam a tarifa fixa base de 1500 centavos.\" Implementation returns 1500 regardless of weight when weight <=1000, regardless of order value. But rule 1 (free shipping) is earlier, and code checks free shipping first. So free shipping overrides. That's correct.\n\n14. Potential bug: When pesoGramas <=0, validarDadosPedido throws, but if pesoGramas is 0 and valorPedido >=20000, the code will first validate and throw before returning 0. The specification says throws if weight <=0 or value <=0. So even if free shipping would apply, exception should be thrown. That's consistent.\n\nThus only missing @throws tag.\n\nAlso perhaps missing description for parameters in Javadoc for calcularAdicionalPeso: it's fine.\n\nPotential issue: In calcularFrete Javadoc, @param valorPedido description says \"valor total dos produtos, em centavos\". Good.\n\nMaybe issue: The class lacks a package declaration, but not mandatory.\n\nMaybe issue: The method calcularFrete uses magic numbers (20000, 1000, 1500, 500, 300, 4500) - could be constants. Could be considered code smell (excedente?). The category \"excedente\" means extra (maybe unnecessary) code. Not sure.\n\nProbably the main problem is missing @throws in validarDadosPedido Javadoc.\n\nAlso maybe the Javadoc of calcularFrete line 25-26 says @throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. That's correct.\n\nBut the method validarDadosPedido also throws IllegalArgumentException but Javadoc does not mention. That's a missing documentation.\n\nThus list one problem.\n\nSeverity: menor (documentation issue).\n\nCategory: ausente (missing @throws).\n\nLine numbers: 48-55 (or the Javadoc block lines 42-47). The missing tag is in the Javadoc at lines 42-47. So we can indicate lines 42-47.\n\nLet's produce final answer.",
+  "resposta_completa": {
+    "id": "chatcmpl-16e59532-0336-4f64-95fc-4c8e424307ce",
+    "object": "chat.completion",
+    "created": 1794321771,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 42‑47  \n   Descrição: O Javadoc do método **validarDadosPedido** não informa que ele pode lançar **IllegalArgumentException** quando os parâmetros são inválidos.  \n   Categoria: ausente  \n   Severidade: menor.",
+          "reasoning": "We need to review code, list problems with line numbers, description, category (ausente, incorreto ou excedente), severity (maior, menor). Check Javadoc vs implementation, edge cases, potential bugs.\n\nLet's analyze:\n\n- Javadoc says promotion free shipping for orders with value >=20000 centavos inclusive. Implementation returns 0 if valorPedido >=20000. Good.\n\n- For weight up to 1000 grams inclusive, tarifa base 1500. Implementation returns 1500 for pesoGramas <=1000. Good.\n\n- For above 1000, add 300 per 500g block or fraction. Implementation: pesoExcedente = pesoGramas - 1000; calcularAdicionalPeso computes blocos = pesoExcedente/500; if remainder !=0 then blocos++; return blocos*300. That matches rule.\n\n- Max freight 4500: return Math.min(total, 4500). Good.\n\nPotential issues:\n\n1. validarDadosPedido throws IllegalArgumentException if weight <=0 or value <=0. Javadoc for calcularFrete says throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. That matches.\n\n2. Edge case: pesoGramas negative is caught. Good.\n\n3. However, calculation of adicional when pesoExcedente is 0? Not possible because weight >1000 leads to >0. If pesoExcedente=0, blocos=0, remainder 0, returns 0. But not used.\n\n4. Potential overflow? int range is fine for centavos.\n\n5. Javadoc for calcularFrete says return value in centavos. Good.\n\n6. Potential issue: When pesoGramas is extremely large, calcularAdicionalPeso may overflow int when multiplied by 300. But unlikely. Might be considered.\n\n7. The method validarDadosPedido is private but Javadoc says \"Valida se os parâmetros de entrada do pedido são válidos.\" fine.\n\n8. Category: maybe missing @throws in validarDadosPedido Javadoc, but not required. But Javadoc for validarDadosPedido does not document that it can throw IllegalArgumentException. Could be considered missing documentation (ausente). However the instruction says \"para cada problema, informe ... Categoria: ausente, incorreto ou excedente\". So if something is missing (ausente). So missing @throws in validarDadosPedido Javadoc is a problem: Javadoc missing @throws tag for IllegalArgumentException.\n\n9. Also, Javadoc for class says \"Calcula o frete...\" but class name is CalculadoraFrete; fine.\n\n10. Another potential issue: The class does not handle null (not applicable). No.\n\n11. The method calcularFrete returns int; fine.\n\n12. The method calcularAdicionalPeso could be static, but not required.\n\n13. In Javadoc of calcularFrete, the description of rule 2 says \"Pedidos com peso de até 1000 gramas, inclusive, pagam a tarifa fixa base de 1500 centavos.\" Implementation returns 1500 regardless of weight when weight <=1000, regardless of order value. But rule 1 (free shipping) is earlier, and code checks free shipping first. So free shipping overrides. That's correct.\n\n14. Potential bug: When pesoGramas <=0, validarDadosPedido throws, but if pesoGramas is 0 and valorPedido >=20000, the code will first validate and throw before returning 0. The specification says throws if weight <=0 or value <=0. So even if free shipping would apply, exception should be thrown. That's consistent.\n\nThus only missing @throws tag.\n\nAlso perhaps missing description for parameters in Javadoc for calcularAdicionalPeso: it's fine.\n\nPotential issue: In calcularFrete Javadoc, @param valorPedido description says \"valor total dos produtos, em centavos\". Good.\n\nMaybe issue: The class lacks a package declaration, but not mandatory.\n\nMaybe issue: The method calcularFrete uses magic numbers (20000, 1000, 1500, 500, 300, 4500) - could be constants. Could be considered code smell (excedente?). The category \"excedente\" means extra (maybe unnecessary) code. Not sure.\n\nProbably the main problem is missing @throws in validarDadosPedido Javadoc.\n\nAlso maybe the Javadoc of calcularFrete line 25-26 says @throws IllegalArgumentException se pesoGramas for menor ou igual a zero ou valorPedido for menor ou igual a zero. That's correct.\n\nBut the method validarDadosPedido also throws IllegalArgumentException but Javadoc does not mention. That's a missing documentation.\n\nThus list one problem.\n\nSeverity: menor (documentation issue).\n\nCategory: ausente (missing @throws).\n\nLine numbers: 48-55 (or the Javadoc block lines 42-47). The missing tag is in the Javadoc at lines 42-47. So we can indicate lines 42-47.\n\nLet's produce final answer."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.312570928,
+      "prompt_tokens": 1058,
+      "prompt_time": 0.058546565,
+      "completion_tokens": 1095,
+      "completion_time": 2.309758021,
+      "total_tokens": 2153,
+      "total_time": 2.368304586,
+      "completion_tokens_details": {
+        "reasoning_tokens": 1030
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_69334c0be3",
+    "x_groq": {
+      "id": "req_01m72yjrb2ezj9tt51trwn8vb3",
+      "seed": 1863714583
+    },
+    "service_tier": "on_demand"
+  }
+}

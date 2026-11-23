@@ -1,0 +1,9 @@
+1. Linhas: 49‑50  
+   Descrição: A condição verifica `minutos < 15`, de modo que para `minutos == 15` a tarifa cobrada é 800 centavos, contrariando o Javadoc que estabelece que permanências de até 15 minutos, inclusive, são gratuitas.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 34‑38  
+   Descrição: Não há implementação que limite a tarifa a no máximo 3000 centavos antes de aplicar o desconto de ticket validado, violando a regra 4 do Javadoc. Por exemplo, para `minutos = 481` e `validado = false` o método devolve 3200 centavos, ultrapassando o teto especificado.  
+   Categoria: ausente  
+   Severidade: maior

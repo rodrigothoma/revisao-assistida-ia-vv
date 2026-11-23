@@ -1,0 +1,9 @@
+1. Linhas: 58  
+   Descrição: Para atrasos a partir de 4 dias o cálculo do valor base está incorreto. O método `calcularValorBase` soma `(3 * 200) + (diasAtraso * 350)`, cobrando 350 centavos por **todos** os dias, inclusive os três primeiros, ao invés de cobrar 350 apenas pelos dias que excedem os três iniciais. Ex.: para 5 dias de atraso o valor retornado é `3*200 + 5*350 = 2150` centavos, quando o correto seria `3*200 + (5-3)*350 = 1500` centavos.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 70‑71  
+   Descrição: Quando o exemplar é de reserva técnica, a regra especificada indica que o valor total da multa deve ser **multiplicado por 2**. O método `aplicarRegraReserva` devolve `(valorBase * 2) + 500`, adicionando arbitrariamente 500 centavos ao resultado, o que gera um valor maior que o especificado. Ex.: para valorBase = 600, o método devolve `1700` centavos, enquanto o esperado é `1200` centavos.  
+   Categoria: excedente  
+   Severidade: maior

@@ -1,0 +1,9 @@
+1. Linhas: 26‑28  
+   Descrição: O método **calcularMedia** altera o valor de `p1` quando `p2 > p1`, fazendo com que a fórmula passe a usar o maior valor duas vezes (3 × p2 + 3 × p2 + 4 × trabalho). Isso gera uma média diferente da especificada, que deve ser (3 × p1 + 3 × p2 + 4 × trabalho) / 10. Exemplo: p1 = 50, p2 = 80, trabalho = 70 → esperado 67, obtido 76.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 57‑62  
+   Descrição: O método **situacao** verifica primeiro se a média é ≥ 60 e devolve `APROVADO`, antes de checar a frequência. Conforme a especificação, a regra de frequência (< 75 %) tem prioridade sobre a média, devendo retornar `REPROVADO_FREQUENCIA` mesmo que a média seja alta. Exemplo: p1 = 80, p2 = 80, trabalho = 80 (média = 80), frequência = 70 → esperado `REPROVADO_FREQUENCIA`, obtido `APROVADO`.  
+   Categoria: incorreto  
+   Severidade: maior

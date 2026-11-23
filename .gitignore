@@ -1,0 +1,32 @@
+# Defects4J (abandonado após o piloto 1; não versionar)
+defects4j/
+piloto/lang_*_b/
+
+# Ambiente Python
+piloto/venv/
+venv/
+__pycache__/
+*.pyc
+
+# Chaves
+.env
+
+# Auxiliares de LaTeX
+*.aux
+*.log
+*.bbl
+*.blg
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Logs das execuções do Gemini
+cenarios/*/sugestoes/log_*.txt
+
+# Metadados do Windows
+*:Zone.Identifier
+
+# Ambiente Python das análises
+.venv-analise/

@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_fix_numerado.txt",
+  "execucao": 4,
+  "data_hora": "2026-11-10T01:40:58",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_c868cf1eaa",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.207620282,
+    "prompt_tokens": 1252,
+    "prompt_time": 0.054773137,
+    "completion_tokens": 729,
+    "completion_time": 1.5123540389999999,
+    "total_tokens": 1981,
+    "total_time": 1.567127176,
+    "completion_tokens_details": {
+      "reasoning_tokens": 714
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects where code diverges from Javadoc. Let's read Javadoc spec.\n\nClass: calculates average and final situation.\n\nMethod calcularMedia: Javadoc says average is (3 × p1 + 3 × p2 + 4 × trabalho) / 10, integer division (fraction discarded). It also says throws IllegalArgumentException if any note outside 0-100. Implementation: validates each with validarNota (which throws). Then returns (3 * p1 + 3 * p2 + 4 * trabalho) / 10. That matches spec.\n\nPotential issue: validarNota method checks note <0 or >100, correct. So no defect.\n\nMethod situacao: Javadoc rules:\n\n1. Frequency below 75% => REPROVADO_FREQUENCIA, regardless of media.\n2. Media >= 60 => APROVADO\n3. Media 40 to 59 => EXAME\n4. Media < 40 => REPROVADO\n\nImplementation:\n\n- Validates frequencia range 0-100 (ok)\n- int media = calcularMedia(p1, p2, trabalho); // this will validate notes; good\n- if (frequencia < 75) return REPROVADO_FREQUENCIA;\n- if (media >= 60) return APROVADO;\n- if (media >= 40) return EXAME;\n- return REPROVADO;\n\nThat matches rules.\n\nPotential nuance: The Javadoc states that notes and frequency are in range 0-100, and throws IllegalArgumentException if any note or frequency outside 0-100. Implementation validates frequency only; notes validation is done inside calcularMedia which throws IllegalArgumentException. So it's covered.\n\nPotential defect: The order of validation: For frequency invalid, they throw before calling calcularMedia. That's fine.\n\nPotential hidden: Javadoc says notes are in decimos de ponto (0-100) meaning 75 means 7.5. Implementation uses int math; that's as spec.\n\nPotential defect: The method situacao uses calcularMedia which already validates notes; but if frequency invalid, they throw earlier. That's fine.\n\nEdge cases: Frequencia exactly 75 => not REPROVADO_FREQUENCIA, go to next rule. That's correct per spec (below 75). So fine.\n\nPotential missing: The method situacao should also validate notes for range, which it does via calcularMedia. However, if calcularMedia throws IllegalArgumentException, the message is \"nota invalida: X\". The spec doesn't require specific message; fine.\n\nPotential functional defect: The Javadoc says \"Média a partir de 60 resulta em APROVADO\". Implementation uses >= 60, correct.\n\n\"Média de 40 a 59 resulta em EXAME\". Implementation uses >=40 (so includes 60? No because earlier condition catches >=60). So 40-59 inclusive will satisfy >=40 but not >=60, returns EXAME. correct.\n\n\"Média abaixo de 40 resulta em REPROVADO\". Implementation else returns REPROVADO. correct.\n\nThus code seems correct.\n\nAny off-by-one: The average calculation integer division discards fraction: (sum)/10. That's correct.\n\nEdge: If sum is negative? Not possible due to validation.\n\nThus likely no functional defects. Let's double-check Javadoc for validarNota: it says throws IllegalArgumentException se a nota estiver fora de 0 a 100. Implementation matches.\n\nThus answer: Nenhum defeito encontrado.\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-81b9af06-5781-4499-807f-b5cbc18d66ee",
+    "object": "chat.completion",
+    "created": 1794285671,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects where code diverges from Javadoc. Let's read Javadoc spec.\n\nClass: calculates average and final situation.\n\nMethod calcularMedia: Javadoc says average is (3 × p1 + 3 × p2 + 4 × trabalho) / 10, integer division (fraction discarded). It also says throws IllegalArgumentException if any note outside 0-100. Implementation: validates each with validarNota (which throws). Then returns (3 * p1 + 3 * p2 + 4 * trabalho) / 10. That matches spec.\n\nPotential issue: validarNota method checks note <0 or >100, correct. So no defect.\n\nMethod situacao: Javadoc rules:\n\n1. Frequency below 75% => REPROVADO_FREQUENCIA, regardless of media.\n2. Media >= 60 => APROVADO\n3. Media 40 to 59 => EXAME\n4. Media < 40 => REPROVADO\n\nImplementation:\n\n- Validates frequencia range 0-100 (ok)\n- int media = calcularMedia(p1, p2, trabalho); // this will validate notes; good\n- if (frequencia < 75) return REPROVADO_FREQUENCIA;\n- if (media >= 60) return APROVADO;\n- if (media >= 40) return EXAME;\n- return REPROVADO;\n\nThat matches rules.\n\nPotential nuance: The Javadoc states that notes and frequency are in range 0-100, and throws IllegalArgumentException if any note or frequency outside 0-100. Implementation validates frequency only; notes validation is done inside calcularMedia which throws IllegalArgumentException. So it's covered.\n\nPotential defect: The order of validation: For frequency invalid, they throw before calling calcularMedia. That's fine.\n\nPotential hidden: Javadoc says notes are in decimos de ponto (0-100) meaning 75 means 7.5. Implementation uses int math; that's as spec.\n\nPotential defect: The method situacao uses calcularMedia which already validates notes; but if frequency invalid, they throw earlier. That's fine.\n\nEdge cases: Frequencia exactly 75 => not REPROVADO_FREQUENCIA, go to next rule. That's correct per spec (below 75). So fine.\n\nPotential missing: The method situacao should also validate notes for range, which it does via calcularMedia. However, if calcularMedia throws IllegalArgumentException, the message is \"nota invalida: X\". The spec doesn't require specific message; fine.\n\nPotential functional defect: The Javadoc says \"Média a partir de 60 resulta em APROVADO\". Implementation uses >= 60, correct.\n\n\"Média de 40 a 59 resulta em EXAME\". Implementation uses >=40 (so includes 60? No because earlier condition catches >=60). So 40-59 inclusive will satisfy >=40 but not >=60, returns EXAME. correct.\n\n\"Média abaixo de 40 resulta em REPROVADO\". Implementation else returns REPROVADO. correct.\n\nThus code seems correct.\n\nAny off-by-one: The average calculation integer division discards fraction: (sum)/10. That's correct.\n\nEdge: If sum is negative? Not possible due to validation.\n\nThus likely no functional defects. Let's double-check Javadoc for validarNota: it says throws IllegalArgumentException se a nota estiver fora de 0 a 100. Implementation matches.\n\nThus answer: Nenhum defeito encontrado.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.207620282,
+      "prompt_tokens": 1252,
+      "prompt_time": 0.054773137,
+      "completion_tokens": 729,
+      "completion_time": 1.5123540389999999,
+      "total_tokens": 1981,
+      "total_time": 1.567127176,
+      "completion_tokens_details": {
+        "reasoning_tokens": 714
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_c868cf1eaa",
+    "x_groq": {
+      "id": "req_01m71w534ge79s30vgg0w5b473",
+      "seed": 159117247
+    },
+    "service_tier": "on_demand"
+  }
+}

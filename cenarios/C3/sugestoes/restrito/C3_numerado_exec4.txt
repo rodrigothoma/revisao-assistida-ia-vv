@@ -1,0 +1,9 @@
+1. Linhas: 30‑31  
+   Descrição: O frete gratuito deve ser concedido para pedidos com valor **a partir de 20000 centavos, inclusive**. O código verifica `if (valorPedido > 20000)`, portanto para `valorPedido == 20000` não retorna 0, violando o Javadoc.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 38‑39  
+   Descrição: O Javadoc estabelece que o valor final do frete não pode exceder o teto de **4500 centavos**, mas o método retorna `total` sem aplicar esse limite, permitindo valores superiores ao máximo especificado.  
+   Categoria: ausente  
+   Severidade: maior

@@ -1,0 +1,159 @@
+revisor,formulario,envio,campo,valor
+R1,C1-H,15:04:26.531,Encontrou algum defeito neste código?,Sim
+R1,C1-H,15:04:26.531,Apontamento 1 - Linhas,49.0
+R1,C1-H,15:04:26.531,Apontamento 1 - Descrição,"O Javadoc diz na Regra 1 que permanências de até 15 minutos são gratuitas, mas o código usa minutos < 15. Uma entrada com minutos = 15 faz a função cobrar 800 centavos em vez de 0."
+R1,C1-H,15:04:26.531,Apontamento 1 - Categoria,Incorreto
+R1,C1-H,15:04:26.531,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R1,C1-H,15:04:26.531,Registrar outro apontamento?,Sim
+R1,C1-H,15:04:26.531,Apontamento 2 - Linhas,34-37
+R1,C1-H,15:04:26.531,Apontamento 2 - Descrição,"O Javadoc especifica na Regra 4 que a tarifa de uma permanência nunca passa de 3000 centavos. No código, o método calcularTarifa não impõe esse limite teto. Uma entrada como minutos = 600 e validado = false resulta em 3500 centavos em vez do limite de 3000."
+R1,C1-H,15:04:26.531,Apontamento 2 - Categoria,Ausente
+R1,C1-H,15:04:26.531,Apontamento 2 - Severidade,Maior (causa mau funcionamento)
+R1,C1-H,15:04:26.531,Registrar outro apontamento? 2,"Não, terminei"
+R1,C2-L1,15:15:26.963,Decisão sobre a sugestão 1,Aceito (é defeito)
+R1,C2-L1,15:15:26.963,Justificativa da decisão sobre a sugestão 1,"O Javadoc diz bem claro que a frequência abaixo de 75% é prioridade máxima e devia reprovar direto. Mas no código a checagem de média >= 60 vem antes, então se o aluno tiver nota alta ele passa mesmo estando com a frequência estourada."
+R1,C2-L1,15:15:26.963,Decisão sobre a sugestão 2,Descarto (não é defeito)
+R1,C2-L1,15:15:26.963,Justificativa da decisão sobre a sugestão 2,"O método não ser static é só uma escolha de design, não descumpre nenhuma regra do Javadoc e nem afeta o funcionamento do código."
+R1,C2-L1,15:15:26.963,Encontrou algum defeito neste código?,Sim
+R1,C2-L1,15:15:26.963,Apontamento 1 - Linhas,57-62
+R1,C2-L1,15:15:26.963,Apontamento 1 - Descrição,"O Javadoc diz que a frequência abaixo de 75% tem prioridade máxima. Mas no código a média >= 60 é testada primeiro. Com frequencia = 70 e notas que dão media = 80, o código devolve aprovado em vez de reprovado_frequencia."
+R1,C2-L1,15:15:26.963,Apontamento 1 - Categoria,Incorreto
+R1,C2-L1,15:15:26.963,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R1,C2-L1,15:15:26.963,Apontamento 1 - Origem,Sugestão 1
+R1,C2-L1,15:15:26.963,Registrar outro apontamento?,"Não, terminei"
+R1,C3-H,15:22:12.258,Encontrou algum defeito neste código?,Sim
+R1,C3-H,15:22:12.258,Apontamento 1 - Linhas,30.0
+R1,C3-H,15:22:12.258,Apontamento 1 - Descrição,"O Javadoc diz na regra 1 que pedidos com valor a partir de 20000 centavos, inclusive, têm frete grátis. O código usa if (valorPedido > 20000), fazendo com que um pedido de exatamente 20000 centavos seja cobrado em vez de retornar 0."
+R1,C3-H,15:22:12.258,Apontamento 1 - Categoria,Incorreto
+R1,C3-H,15:22:12.258,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R1,C3-H,15:22:12.258,Registrar outro apontamento?,"Não, terminei"
+R1,C4-L2,15:43:05.209,Decisão sobre a sugestão 1,Descarto (não é defeito)
+R1,C4-L2,15:43:05.209,Justificativa da decisão sobre a sugestão 1,"Usar números mágicos é no máximo uma questão de boas práticas de código, mas não descumpre nenhuma especificação do Javadoc e nem altera o resultado final da função."
+R1,C4-L2,15:43:05.209,Decisão sobre a sugestão 2,Aceito (é defeito)
+R1,C4-L2,15:43:05.209,Justificativa da decisão sobre a sugestão 2,"O Javadoc diz que se for exemplar de reserva técnica a multa deve ser multiplicada por 2. O código tá fazendo (valorBase * 2) + 500, adicionando 500 centavos a mais que a especificação não pediu."
+R1,C4-L2,15:43:05.209,Encontrou algum defeito neste código?,Sim
+R1,C4-L2,15:43:05.209,Apontamento 1 - Linhas,70.0
+R1,C4-L2,15:43:05.209,Apontamento 1 - Descrição,"O Javadoc pede só para multiplicar o valor por 2 quando for livro de reserva técnica. Só que no código colocaram + 500 no final da conta. Se o valorBase for 1000 e for reserva técnica, a função devolve 2500 em vez dos 2000 que devia ser."
+R1,C4-L2,15:43:05.209,Apontamento 1 - Categoria,Incorreto
+R1,C4-L2,15:43:05.209,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R1,C4-L2,15:43:05.209,Apontamento 1 - Origem,Sugestão 2
+R1,C4-L2,15:43:05.209,Registrar outro apontamento?,"Não, terminei"
+R1,CARACTERIZACAO,14:43:37.543,Em que período do curso você está?,3º ou 4º
+R1,CARACTERIZACAO,14:43:37.543,Há quanto tempo você programa em Java?,De 6 meses a 1 ano
+R1,CARACTERIZACAO,14:43:37.543,Você já participou de revisões de código?,Nunca
+R1,CARACTERIZACAO,14:43:37.543,"Com que frequência você usa assistentes de IA para programar (ChatGPT, Copilot, Gemini etc.)?",Todos os dias ou quase
+R2,C1-L2,15:18:41.908,Decisão sobre a sugestão 1,Descarto (não é defeito)
+R2,C1-L2,15:18:41.908,Justificativa da decisão sobre a sugestão 1,"Descarto, porque o metodo calcularTarifa ja faz a verificao de minuto nao negativo, e o metodo tarifaPorTempo so chama horasAdicionais se o tempo de permanencia passar ods 60 min."
+R2,C1-L2,15:18:41.908,Decisão sobre a sugestão 2,Aceito (é defeito)
+R2,C1-L2,15:18:41.908,Justificativa da decisão sobre a sugestão 2,"Realmente o codigo nao impõe esse limite de 3000 centavos definidos no javadoc, o que pode causar o aumento do valor da tarifa de forma errada."
+R2,C1-L2,15:18:41.908,Encontrou algum defeito neste código?,Sim
+R2,C1-L2,15:18:41.908,Apontamento 1 - Linhas,34-38
+R2,C1-L2,15:18:41.908,Apontamento 1 - Descrição,O método calcularTarifa não ta aplicando o limite máximo de 3000 centavos escrito no Javadoc e a tarifa pode ultrapassar o valor permitido e o desconto pode ser aplicado sobre um valor errado. 
+R2,C1-L2,15:18:41.908,Apontamento 1 - Categoria,Ausente
+R2,C1-L2,15:18:41.908,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R2,C1-L2,15:18:41.908,Apontamento 1 - Origem,Sugestão 2
+R2,C1-L2,15:18:41.908,Registrar outro apontamento?,"Não, terminei"
+R2,C2-H,14:59:45.073,Encontrou algum defeito neste código?,Sim
+R2,C2-H,14:59:45.073,Apontamento 1 - Linhas,56-61
+R2,C2-H,14:59:45.073,Apontamento 1 - Descrição,"a frequencia esta sendo calculada depois da média, contrariando o javadoc e podendo causar a aprovacao de forma errado do aluno."
+R2,C2-H,14:59:45.073,Apontamento 1 - Categoria,Incorreto
+R2,C2-H,14:59:45.073,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R2,C2-H,14:59:45.073,Registrar outro apontamento?,"Não, terminei"
+R2,C3-L1,15:41:06.536,Decisão sobre a sugestão 1,Aceito (é defeito)
+R2,C3-L1,15:41:06.536,Justificativa da decisão sobre a sugestão 1,"O Javadoc determina que pedidos com valor igual ou superior a 20000 centavos tenham frete grátis. Porém, o código utiliza > 20000, deixando de incluir o valor exato de 20000. Assim, um pedido de 20000 centavos recebe cobrança de frete de forma errada."
+R2,C3-L1,15:41:06.536,Decisão sobre a sugestão 2,Descarto (não é defeito)
+R2,C3-L1,15:41:06.536,Justificativa da decisão sobre a sugestão 2,"Embora o uso de constantes pudesse melhorar a manutenção e a legibilidade do código, os valores utilizados estao de acordo com as regras descritas no Javadoc. Por isso, não considero uma violação funcional da especificação, mas sim apenas uma oportunidade de melhoria."
+R2,C3-L1,15:41:06.536,Encontrou algum defeito neste código?,Sim
+R2,C3-L1,15:41:06.536,Apontamento 1 - Linhas,30-31
+R2,C3-L1,15:41:06.536,Apontamento 1 - Descrição,"O código verifica se o valor do pedido é maior que 20000, mas o Javadoc determina frete grátis para valores iguais ou superiores a 20000. Assim, um pedido de exatamente 20000 centavos não recebe frete grátis, contrariando a especificação."
+R2,C3-L1,15:41:06.536,Apontamento 1 - Categoria,Ausente
+R2,C3-L1,15:41:06.536,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R2,C3-L1,15:41:06.536,Apontamento 1 - Origem,Sugestão 1
+R2,C3-L1,15:41:06.536,Registrar outro apontamento?,Sim
+R2,C3-L1,15:41:06.536,Apontamento 2 - Linhas,38-39
+R2,C3-L1,15:41:06.536,Apontamento 2 - Descrição,"O método calcularFrete não está verirficando o limite máximo de 4500 centavos definido no Javadoc. Então, se para um pedido de 7000 gramas e valor de 10000 centavos, o código retorna 5100 centavos quando deveria retornar no máximo 4500 centavos."
+R2,C3-L1,15:41:06.536,Apontamento 2 - Categoria,Ausente
+R2,C3-L1,15:41:06.536,Apontamento 2 - Severidade,Maior (causa mau funcionamento)
+R2,C3-L1,15:41:06.536,Apontamento 2 - Origem,Própria
+R2,C3-L1,15:41:06.536,Registrar outro apontamento? 2,"Não, terminei"
+R2,C4-H,15:24:56.561,Encontrou algum defeito neste código?,Sim
+R2,C4-H,15:24:56.561,Apontamento 1 - Linhas,70.0
+R2,C4-H,15:24:56.561,Apontamento 1 - Descrição,"O método aplicarRegraReserva adiciona de forma errada 500 centavos ao valor da multa de exemplares da reserva técnica. Segundo o Javadoc, a multa deve apenas ser multiplicada por 2. Por exemplo, para 2 dias de atraso com reserva técnica, retorna 1300 centavos quando deveria retornar 800 centavos."
+R2,C4-H,15:24:56.561,Apontamento 1 - Categoria,Excedente
+R2,C4-H,15:24:56.561,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R2,C4-H,15:24:56.561,Registrar outro apontamento?,"Não, terminei"
+R2,CARACTERIZACAO,14:46:53.011,Em que período do curso você está?,3º ou 4º
+R2,CARACTERIZACAO,14:46:53.011,Há quanto tempo você programa em Java?,De 1 a 2 anos
+R2,CARACTERIZACAO,14:46:53.011,Você já participou de revisões de código?,Só em atividades de disciplinas
+R2,CARACTERIZACAO,14:46:53.011,"Com que frequência você usa assistentes de IA para programar (ChatGPT, Copilot, Gemini etc.)?",Todos os dias ou quase
+R3,C1-L1,15:21:13.438,Decisão sobre a sugestão 1,Aceito (é defeito)
+R3,C1-L1,15:21:13.438,Justificativa da decisão sobre a sugestão 1,O foi reconhecido e detalhado com clareza na sugestão 1
+R3,C1-L1,15:21:13.438,Decisão sobre a sugestão 2,Aceito (é defeito)
+R3,C1-L1,15:21:13.438,Justificativa da decisão sobre a sugestão 2,concordo com a sugestão 2 apresentada
+R3,C1-L1,15:21:13.438,Encontrou algum defeito neste código?,Não
+R3,C2-H,15:32:34.078,Encontrou algum defeito neste código?,Sim
+R3,C2-H,15:32:34.078,Apontamento 1 - Linhas,"26-27, 57, 60, 63"
+R3,C2-H,15:32:34.078,Apontamento 1 - Descrição,"
+a comparação da linha 26,e atribuir uma nota menor a prova que obteve maior nota não faz sentido, os condicionais de comparação de presença estão incompletos, na linha 57 compara-se somente a média e não considera-se a frequência, na linha 63 compara somente a média sem levar em consideração a frequencia"
+R3,C2-H,15:32:34.078,Apontamento 1 - Categoria,Excedente
+R3,C2-H,15:32:34.078,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R3,C2-H,15:32:34.078,Registrar outro apontamento?,"Não, terminei"
+R3,C3-L2,15:11:33.495,Decisão sobre a sugestão 1,Aceito (é defeito)
+R3,C3-L2,15:11:33.495,Justificativa da decisão sobre a sugestão 1,"existe uma explicação para os valores, entretanto não é declarado uma variavel para definir constantes para alterações centralizadas"
+R3,C3-L2,15:11:33.495,Decisão sobre a sugestão 2,Aceito (é defeito)
+R3,C3-L2,15:11:33.495,Justificativa da decisão sobre a sugestão 2,"concordo, não ocorre a validação mesmo que seja declarado no javadoc que deve ser feito"
+R3,C3-L2,15:11:33.495,Encontrou algum defeito neste código?,Sim
+R3,C3-L2,15:11:33.495,Apontamento 1 - Linhas,"30,36,38,63"
+R3,C3-L2,15:11:33.495,Apontamento 1 - Descrição,"linha 30 contém erro de comparador, no texto diz 20.000 inclusive ou seja, deveria ser "">="" e não "">"" na linha 36 o valor da subtração será negativo, que vai influenciar ao somar com a variável total na linha 38 na linha 63, está ocorrendo o resto da divisão, caso o valor superior a 1000 não seja divisível por 500 mesmo que ultrapasse 1000, não será feito a operação corretamente"
+R3,C3-L2,15:11:33.495,Apontamento 1 - Categoria,Incorreto
+R3,C3-L2,15:11:33.495,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R3,C3-L2,15:11:33.495,Apontamento 1 - Origem,Sugestão 1
+R3,C3-L2,15:11:33.495,Registrar outro apontamento?,"Não, terminei"
+R3,C4-H,15:16:41.196,Encontrou algum defeito neste código?,Sim
+R3,C4-H,15:16:41.196,Apontamento 1 - Linhas,58.0
+R3,C4-H,15:16:41.196,Apontamento 1 - Descrição,"na linha 58 ocorre não ocorre uma subtração dos 3 dias iniciais para poder multiplicar o valor de atraso a partir do 4 dia, entretanto no javadoc diz explicitamente que será 3* diaria de 200 + numero de dias acima de 3 dias * 350, o que não está no código de cálculo"
+R3,C4-H,15:16:41.196,Apontamento 1 - Categoria,Excedente
+R3,C4-H,15:16:41.196,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R3,C4-H,15:16:41.196,Registrar outro apontamento?,"Não, terminei"
+R3,CARACTERIZACAO,14:42:38.041,Em que período do curso você está?,5º ou 6º
+R3,CARACTERIZACAO,14:42:38.041,Há quanto tempo você programa em Java?,Menos de 6 meses
+R3,CARACTERIZACAO,14:42:38.041,Você já participou de revisões de código?,"Em estágio, trabalho ou projeto fora das disciplinas"
+R3,CARACTERIZACAO,14:42:38.041,"Com que frequência você usa assistentes de IA para programar (ChatGPT, Copilot, Gemini etc.)?",Todos os dias ou quase
+R4,C1-H,15:49:55.498,Encontrou algum defeito neste código?,Sim
+R4,C1-H,15:49:55.498,Apontamento 1 - Linhas,49-50
+R4,C1-H,15:49:55.498,Apontamento 1 - Descrição,"Se o dono do carro ficar 15 minutos exatamente ele nao deve pagar nada mas o código faz com que ele pague a tarifa da 1º hora pois faz ""minutos < 15"" quando no java doc fala que ""15 inclusive"" deveria ser ""minutos <= 15"" "
+R4,C1-H,15:49:55.498,Apontamento 1 - Categoria,Incorreto
+R4,C1-H,15:49:55.498,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R4,C1-H,15:49:55.498,Registrar outro apontamento?,"Não, terminei"
+R4,C2-L2,15:43:28.775,Decisão sobre a sugestão 1,Descarto (não é defeito)
+R4,C2-L2,15:43:28.775,Justificativa da decisão sobre a sugestão 1,"Não lembro pra que serve o static, mas olhando para a funcionalidade ela está ok"
+R4,C2-L2,15:43:28.775,Decisão sobre a sugestão 2,Aceito (é defeito)
+R4,C2-L2,15:43:28.775,Justificativa da decisão sobre a sugestão 2,O valor é alterado de forma errada
+R4,C2-L2,15:43:28.775,Encontrou algum defeito neste código?,Sim
+R4,C2-L2,15:43:28.775,Apontamento 1 - Linhas,22-30
+R4,C2-L2,15:43:28.775,Apontamento 1 - Descrição,"ele usa a nota de p2 no p1, onde cada umas das notas deveriam ter um valor respectivo"
+R4,C2-L2,15:43:28.775,Apontamento 1 - Categoria,Incorreto
+R4,C2-L2,15:43:28.775,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R4,C2-L2,15:43:28.775,Apontamento 1 - Origem,Sugestão 1
+R4,C2-L2,15:43:28.775,Registrar outro apontamento?,"Não, terminei"
+R4,C3-H,15:32:05.090,Encontrou algum defeito neste código?,Sim
+R4,C3-H,15:32:05.090,Apontamento 1 - Linhas,63-70
+R4,C3-H,15:32:05.090,Apontamento 1 - Descrição,"O javadoc pede: ""acima de 1000 gramas soma-se a tarifa base mais 300 centavos para cada bloco de 500g."" se o peso excedente for algo entre 1 e 499 o frete cobrado será a tarifa base  mais um valor adicional mesmo que não tenha um bloco adicional de 500g "
+R4,C3-H,15:32:05.090,Apontamento 1 - Categoria,Excedente
+R4,C3-H,15:32:05.090,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R4,C3-H,15:32:05.090,Registrar outro apontamento?,"Não, terminei"
+R4,C4-L1,15:07:44.653,Decisão sobre a sugestão 1,Aceito (é defeito)
+R4,C4-L1,15:07:44.653,Justificativa da decisão sobre a sugestão 1,"Realmente o cálculo está incorreto, pois se: DiasDeAtraso = 5 , cálcula (2 * 300) + (5 * 350). Quando na verdade o cálculo deveria ser algo como (3 * 300) + (2 * 350)"
+R4,C4-L1,15:07:44.653,Decisão sobre a sugestão 2,Aceito (é defeito)
+R4,C4-L1,15:07:44.653,Justificativa da decisão sobre a sugestão 2,É um defeito que dificulta a manutenção se o código for escalar e quebra um pouco de convenções mas não necessariamente é algo que possa quebrar o código
+R4,C4-L1,15:07:44.653,Encontrou algum defeito neste código?,Sim
+R4,C4-L1,15:07:44.653,Apontamento 1 - Linhas,54-59
+R4,C4-L1,15:07:44.653,Apontamento 1 - Descrição,"Faz o cálculo de maneira incorreta, pois se: DiasDeAtraso = 5 , cálcula (2 * 300) + (5 * 350). Quando na verdade o cálculo deveria ser algo como (3 * 300) + (2 * 350)"
+R4,C4-L1,15:07:44.653,Apontamento 1 - Categoria,Excedente
+R4,C4-L1,15:07:44.653,Apontamento 1 - Severidade,Maior (causa mau funcionamento)
+R4,C4-L1,15:07:44.653,Apontamento 1 - Origem,Sugestão 1
+R4,C4-L1,15:07:44.653,Registrar outro apontamento?,"Não, terminei"
+R4,CARACTERIZACAO,14:46:24.554,Em que período do curso você está?,3º ou 4º
+R4,CARACTERIZACAO,14:46:24.554,Há quanto tempo você programa em Java?,De 6 meses a 1 ano
+R4,CARACTERIZACAO,14:46:24.554,Você já participou de revisões de código?,"Em estágio, trabalho ou projeto fora das disciplinas"
+R4,CARACTERIZACAO,14:46:24.554,"Com que frequência você usa assistentes de IA para programar (ChatGPT, Copilot, Gemini etc.)?",Todos os dias ou quase

@@ -1,0 +1,154 @@
+/**
+ * <p>Operations for random {@code String}s.</p>
+ * <p>Currently <em>private high surrogate</em> characters are ignored. 
+ * These are Unicode characters that fall between the values 56192 (db80)
+ * and 56319 (dbff) as we don't know how to handle them. 
+ * High and low surrogates are correctly dealt with - that is if a 
+ * high surrogate is randomly chosen, 55296 (d800) to 56191 (db7f) 
+ * then it is followed by a low surrogate. If a low surrogate is chosen, 
+ * 56320 (dc00) to 57343 (dfff) then it is placed after a randomly 
+ * chosen high surrogate. </p>
+ *
+ * <p>#ThreadSafe#</p>
+ * @since 1.0
+ * @version $Id$
+ */
+public class RandomStringUtils {
+    private static final Random RANDOM = new Random();
+
+    // ... (demais membros da classe omitidos) ...
+
+        /**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of characters
+     * specified by the string, must not be empty. 
+     * If null, the set of all characters is used.</p>
+     *
+     * @param count  the length of random string to create
+     * @param chars  the String containing the set of characters to use,
+     *  may be null, but must not be empty
+     * @return the random string
+     * @throws IllegalArgumentException if {@code count} &lt; 0 or the string is empty.
+     */
+    public static String random(int count, String chars) {
+        if (chars == null) {
+            return random(count, 0, 0, false, false, null, RANDOM);
+        }
+        return random(count, chars.toCharArray());
+    }
+
+    /**
+     * <p>Creates a random string whose length is the number of characters
+     * specified.</p>
+     *
+     * <p>Characters will be chosen from the set of characters specified.</p>
+     *
+     * @param count  the length of random string to create
+     * @param chars  the character array containing the set of characters to use,
+     *  may be null
+     * @return the random string
+     * @throws IllegalArgumentException if {@code count} &lt; 0.
+     */
+    public static String random(int count, char... chars) {
+        if (chars == null) {
+            return random(count, 0, 0, false, false, null, RANDOM);
+        }
+        return random(count, 0, chars.length, false, false, chars, RANDOM);
+    }
+
+    /**
+     * <p>Creates a random string based on a variety of options, using
+     * supplied source of randomness.</p>
+     *
+     * <p>If start and end are both {@code 0}, start and end are set
+     * to {@code ' '} and {@code 'z'}, the ASCII printable
+     * characters, will be used, unless letters and numbers are both
+     * {@code false}, in which case, start and end are set to
+     * {@code 0} and {@code Integer.MAX_VALUE}.
+     *
+     * <p>If set is not {@code null}, characters between start and
+     * end are chosen.</p>
+     *
+     * <p>This method accepts a user-supplied {@link Random}
+     * instance to use as a source of randomness. By seeding a single 
+     * {@link Random} instance with a fixed seed and using it for each call,
+     * the same random sequence of strings can be generated repeatedly
+     * and predictably.</p>
+     *
+     * @param count  the length of random string to create
+     * @param start  the position in set of chars to start at
+     * @param end  the position in set of chars to end before
+     * @param letters  only allow letters?
+     * @param numbers  only allow numbers?
+     * @param chars  the set of chars to choose randoms from, must not be empty.
+     *  If {@code null}, then it will use the set of all chars.
+     * @param random  a source of randomness.
+     * @return the random string
+     * @throws ArrayIndexOutOfBoundsException if there are not
+     *  {@code (end - start) + 1} characters in the set array.
+     * @throws IllegalArgumentException if {@code count} &lt; 0 or the provided chars array is empty.
+     * @since 2.0
+     */
+    public static String random(int count, int start, int end, boolean letters, boolean numbers,
+                                char[] chars, Random random) {
+        if (count == 0) {
+            return "";
+        } else if (count < 0) {
+            throw new IllegalArgumentException("Requested random string length " + count + " is less than 0.");
+        }
+
+        if (start == 0 && end == 0) {
+                if (!letters && !numbers) {
+                    end = Integer.MAX_VALUE;
+                } else {
+                    end = 'z' + 1;
+                    start = ' ';                
+                }
+        }
+
+        char[] buffer = new char[count];
+        int gap = end - start;
+
+        while (count-- != 0) {
+            char ch;
+            if (chars == null) {
+                ch = (char) (random.nextInt(gap) + start);
+            } else {
+                ch = chars[random.nextInt(gap) + start];
+            }
+            if (letters && Character.isLetter(ch)
+                    || numbers && Character.isDigit(ch)
+                    || !letters && !numbers) {
+                if(ch >= 56320 && ch <= 57343) {
+                    if(count == 0) {
+                        count++;
+                    } else {
+                        // low surrogate, insert high surrogate after putting it in
+                        buffer[count] = ch;
+                        count--;
+                        buffer[count] = (char) (55296 + random.nextInt(128));
+                    }
+                } else if(ch >= 55296 && ch <= 56191) {
+                    if(count == 0) {
+                        count++;
+                    } else {
+                        // high surrogate, insert low surrogate before putting it in
+                        buffer[count] = (char) (56320 + random.nextInt(128));
+                        count--;
+                        buffer[count] = ch;
+                    }
+                } else if(ch >= 56192 && ch <= 56319) {
+                    // private high surrogate, no effing clue, so skip it
+                    count++;
+                } else {
+                    buffer[count] = ch;
+                }
+            } else {
+                count++;
+            }
+        }
+        return new String(buffer);
+    }
+}

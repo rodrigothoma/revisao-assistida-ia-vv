@@ -1,0 +1,9 @@
+1. Linhas: 49‑51  
+   Descrição: A tarifa gratuita deve ser concedida para permanências de até **15 minutos, inclusive**. O código verifica `if (minutos < 15)` e devolve 0 apenas para minutos menores que 15; para exatamente 15 minutos a tarifa retornada é 800, violando a regra 1.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 34‑38  
+   Descrição: O método `calcularTarifa` nunca impõe o limite máximo de **3000 centavos** previsto na regra 4, nem o aplica antes de efetuar o desconto de parceiro conforme a regra 5. Assim, para valores de tempo que gerariam tarifa acima de 3000 (ex.: 481 minutos → tarifa 3200), o método devolve um valor maior que o permitido, divergindo da especificação.  
+   Categoria: ausente  
+   Severidade: maior

@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_numerado.txt",
+  "execucao": 4,
+  "data_hora": "2026-11-10T11:40:28",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_86dc843b12",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.310548895,
+    "prompt_tokens": 1110,
+    "prompt_time": 0.0759033,
+    "completion_tokens": 663,
+    "completion_time": 1.4056046819999999,
+    "total_tokens": 1773,
+    "total_time": 1.4815079820000001,
+    "completion_tokens_details": {
+      "reasoning_tokens": 497
+    }
+  },
+  "raciocinio_modelo": "We need to identify functional defects relative to Javadoc.\n\nRead spec: rules:\n\n1. Promo frete grátis: pedidos com valor a partir de 20000 centavos, inclusive, têm tarifa zero.\nSpec says \"valor a partir de 20000 centavos, inclusive\". So if valorPedido >= 20000, free. Code line 30: if (valorPedido > 20000) return 0; This is > not >=, so for exactly 20000, code will not return 0. That's a defect: incorrect condition.\n\n2. Weight up to 1000 grams inclusive: fixed base 1500. Code uses <= 1000, fine.\n\n3. Above 1000 grams, add base plus 300 per block of 500 grams additional or fraction. Code calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: divides by 500, adds block if remainder, multiplies by 300. This matches spec.\n\nBut need to ensure final value cannot exceed 4500 centavos (max). Code currently returns total (line 39) without capping. So missing max cap: defect of omitted max. Category: ausente (missing). Severity: major because can exceed limit.\n\nAlso note rule 1: free shipping inclusive of 20000, code uses > only, plus also doesn't consider that if peso > 1000 but valorPedido >=20000, should still be free. Since code checks free before weight, that's fine. However condition wrong.\n\nAlso need to consider validation: Javadoc says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code does that, fine.\n\nPotential other defect: calculation of additional weight includes case where pesoExcedente negative? Not reachable because weight>1000.\n\nEdge case: if pesoExcedente = 0? Not happen because weight >1000, but if weight 1001, excess=1, block calculation: 1/500=0, remainder -> block++ => 1 block, 300. That matches spec \"each block of 500 grams additional or fraction\". Good.\n\nNow the max cap missing. Also free shipping condition.\n\nThus two defects.\n\nProvide lines: first defect lines 30-31 (or 30) . second defect lines 38-39 (or 38-39). Provide description, category, severity.\n\nReturn in Portuguese, plain text.\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-7af8b1fa-757f-45df-9455-8d1cd206e58c",
+    "object": "chat.completion",
+    "created": 1794321630,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 30‑31  \n   Descrição: O frete gratuito deve ser concedido para pedidos com valor **a partir de 20000 centavos, inclusive**. O código verifica `if (valorPedido > 20000)`, portanto para `valorPedido == 20000` não retorna 0, violando o Javadoc.  \n   Categoria: incorreto  \n   Severidade: maior  \n\n2. Linhas: 38‑39  \n   Descrição: O Javadoc estabelece que o valor final do frete não pode exceder o teto de **4500 centavos**, mas o método retorna `total` sem aplicar esse limite, permitindo valores superiores ao máximo especificado.  \n   Categoria: ausente  \n   Severidade: maior",
+          "reasoning": "We need to identify functional defects relative to Javadoc.\n\nRead spec: rules:\n\n1. Promo frete grátis: pedidos com valor a partir de 20000 centavos, inclusive, têm tarifa zero.\nSpec says \"valor a partir de 20000 centavos, inclusive\". So if valorPedido >= 20000, free. Code line 30: if (valorPedido > 20000) return 0; This is > not >=, so for exactly 20000, code will not return 0. That's a defect: incorrect condition.\n\n2. Weight up to 1000 grams inclusive: fixed base 1500. Code uses <= 1000, fine.\n\n3. Above 1000 grams, add base plus 300 per block of 500 grams additional or fraction. Code calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: divides by 500, adds block if remainder, multiplies by 300. This matches spec.\n\nBut need to ensure final value cannot exceed 4500 centavos (max). Code currently returns total (line 39) without capping. So missing max cap: defect of omitted max. Category: ausente (missing). Severity: major because can exceed limit.\n\nAlso note rule 1: free shipping inclusive of 20000, code uses > only, plus also doesn't consider that if peso > 1000 but valorPedido >=20000, should still be free. Since code checks free before weight, that's fine. However condition wrong.\n\nAlso need to consider validation: Javadoc says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code does that, fine.\n\nPotential other defect: calculation of additional weight includes case where pesoExcedente negative? Not reachable because weight>1000.\n\nEdge case: if pesoExcedente = 0? Not happen because weight >1000, but if weight 1001, excess=1, block calculation: 1/500=0, remainder -> block++ => 1 block, 300. That matches spec \"each block of 500 grams additional or fraction\". Good.\n\nNow the max cap missing. Also free shipping condition.\n\nThus two defects.\n\nProvide lines: first defect lines 30-31 (or 30) . second defect lines 38-39 (or 38-39). Provide description, category, severity.\n\nReturn in Portuguese, plain text.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.310548895,
+      "prompt_tokens": 1110,
+      "prompt_time": 0.0759033,
+      "completion_tokens": 663,
+      "completion_time": 1.4056046819999999,
+      "total_tokens": 1773,
+      "total_time": 1.4815079820000001,
+      "completion_tokens_details": {
+        "reasoning_tokens": 497
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_86dc843b12",
+    "x_groq": {
+      "id": "req_01m72yef3jevf819wbp112xggs",
+      "seed": 1511143230
+    },
+    "service_tier": "on_demand"
+  }
+}

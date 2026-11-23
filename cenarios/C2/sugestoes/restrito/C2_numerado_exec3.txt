@@ -1,0 +1,9 @@
+1. Linhas: 26-28  
+   Descrição: O método **calcularMedia** altera o valor de `p1` quando `p2` é maior, usando `p1 = p2`. Isso modifica a fórmula especificada, fazendo com que a média seja calculada com o maior valor de prova duplicado e o menor descartado, divergindo do cálculo `(3 × p1 + 3 × p2 + 4 × trabalho) / 10` descrito no Javadoc. Por exemplo, para `p1=40, p2=80, trabalho=70` o Javadoc prevê média `(3*40 + 3*80 + 4*70)/10 = 61`, porém o código retorna `(3*80 + 3*80 + 4*70)/10 = 79`.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 57-60  
+   Descrição: O método **situacao** verifica primeiro se a média é ≥ 60 e devolve `APROVADO`, antes de checar a frequência. Segundo o Javadoc, a prioridade 1 (frequência < 75 % → `REPROVADO_FREQUENCIA`) deve ser avaliada antes de qualquer decisão baseada na média. Assim, um aluno com média 80 e frequência 70% deveria receber `REPROVADO_FREQUENCIA`, mas o código devolve `APROVADO`.  
+   Categoria: incorreto  
+   Severidade: maior

@@ -1,0 +1,14 @@
+1. Linhas: 30, 33, 34, 36, 38, 39, 64, 66, 68  
+   Descrição: O código utiliza valores literais (1500, 20000, 1000, 500, 300, 4500) espalhados pelo método. Esses “números mágicos” dificultam a manutenção e a compreensão, pois não há contexto explicativo nem possibilidade de alteração centralizada.  
+   Categoria: excedente  
+   Severidade: menor  
+
+2. Linhas: 64‑68, 38‑39  
+   Descrição: O cálculo de `blocos * 300` pode sofrer overflow de `int` quando `pesoExcedente` for muito grande (por exemplo, próximo de `Integer.MAX_VALUE`). O overflow produz um valor negativo, e a chamada `Math.min(total, 4500)` pode então retornar um número negativo, violando a regra de que o frete nunca pode ser inferior a zero.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+3. Linhas: 48‑55  
+   Descrição: O método privado `validarDadosPedido` lança `IllegalArgumentException` quando os parâmetros são inválidos, porém o Javadoc desse método não inclui a tag `@throws`. Embora o método seja privado, a documentação incompleta pode gerar confusão para quem lê o código.  
+   Categoria: ausente  
+   Severidade: menor.

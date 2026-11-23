@@ -1,0 +1,4 @@
+1. Linhas: 53‑55  
+   Descrição: O método `situacao` calcula a média (`calcularMedia(p1, p2, trabalho)`) antes de verificar se a frequência está abaixo de 75 %. Se a frequência for menor que 75 %, a média não é necessária, logo há um cálculo desnecessário que desperdiça tempo de execução.  
+   Categoria: excedente  
+   Severidade: menor.

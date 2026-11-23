@@ -1,0 +1,9 @@
+1. Linhas: 49‑51  
+   Descrição: Para minutos iguais a 15 a tarifa retornada é 800, porém o Javadoc especifica que permanências de até 15 minutos, inclusive, são gratuitas. Entrada que provoca o erro: `calcularTarifa(15, false)`.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 30‑38  
+   Descrição: O método `calcularTarifa` nunca aplica o limite máximo de 3000 centavos descrito na regra 4; portanto, para valores de minutos suficientemente grandes a tarifa retornada ultrapassa 3000 (por exemplo, `calcularTarifa(1000, false)` devolve 5600). Além disso, o desconto para tickets validados é calculado antes de aplicar esse limite, contrariando a especificação que indica que o desconto deve ser aplicado após o limite.  
+   Categoria: ausente (e comportamento incorreto quanto à ordem do desconto)  
+   Severidade: maior

@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_fix_numerado.txt",
+  "execucao": 2,
+  "data_hora": "2026-11-10T01:40:29",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_b1dd3e7a63",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.208416231,
+    "prompt_tokens": 1252,
+    "prompt_time": 0.051892627,
+    "completion_tokens": 856,
+    "completion_time": 1.787085608,
+    "total_tokens": 2108,
+    "total_time": 1.838978235,
+    "completion_tokens_details": {
+      "reasoning_tokens": 841
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects where behavior differs from Javadoc.\n\nLet's examine:\n\nMethod calcularMedia: Javadoc says division is integer, fractional part discarded. Implementation does (3*p1 + 3*p2 + 4*trabalho) / 10. That's correct integer division. Validates notes via validarNota which throws IllegalArgumentException if out of range. That's as spec.\n\nPotential issue: No check for overflow? Not needed.\n\nMethod situacao: Javadoc rules: priority order: 1) Frequency below 75% => REPROVADO_FREQUENCIA regardless of media. Implementation checks frequency bounds (0-100) then calculates media (which validates notes). Then if (frequencia < 75) return REPROVADO_FREQUENCIA. That's correct.\n\nThen if media >= 60 => APROVADO. Good.\n\nThen if media >= 40 => EXAME. That includes media 40-59 inclusive. Good.\n\nElse REPROVADO.\n\nPotential defect: It calculates media before checking frequency <75, but that's okay.\n\nEdge cases: Frequency exactly 75% should not be REPROVADO_FREQUENCIA. Implementation checks <75, correct.\n\nMedia boundary: media >=60 approved, correct. Media 59? should be EXAME. Implementation: if media >=40 then EXAME, correct. Media 39 => REPROVADO.\n\nPotential defect: The spec says \"Média a partir de 60 resulta em APROVADO.\" \"A partir de 60\" includes 60. ok.\n\nNow consider validation: calcularMedia validates each note. situacao calls calcularMedia, which validates notes. However situacao also validates frequency only; but does not validate that p1, p2, trabalho are within range before calling calcularMedia? Actually calcularMedia does validation, so fine. The spec says throws IllegalArgumentException if any nota or frequency out of range. That will happen: if note invalid, calcularMedia will throw IllegalArgumentException, but the message may be about nota, not frequency. That's okay.\n\nPotential functional discrepancy: The spec for validarNota says \"Verifica se uma nota está entre 0 e 100, inclusive.\" Implementation does if (nota < 0 || nota > 100) throw IllegalArgumentException. That's correct.\n\nEdge case: In situacao, the spec says frequency from 0 to 100. Implementation validates same.\n\nPotential missing behavior: The Javadoc says \"frequencia abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" Implementation respects that. No other issues.\n\nCheck integer division rounding: Suppose p1=100, p2=100, trabalho=100 => (300+300+400)/10 = 1000/10=100. fine.\n\nBut spec says notes are in décimos de ponto, 0-100 (75 means 7.5). So they are scaled. Implementation uses same.\n\nPotential defect: calcularMedia returns int. Javadoc says return a média, de 0 a 100. correct.\n\nOne possible functional defect: The method situacao does not validate that p1, p2, trabalho are within 0-100 before calling calcularMedia; but since calcularMedia validates, that's fine. However if calcularMedia throws IllegalArgumentException, the situacao's Javadoc says throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100. The thrown exception originates from validarNota inside calcularMedia, but still IllegalArgumentException. So spec satisfied.\n\nPotential missing: The spec order: frequency check first, then media thresholds. Implementation matches.\n\nThus perhaps no functional defects.\n\nDouble-check: The Javadoc for calcularMedia says division inteira: fractional part discarded. In Java, integer division discards remainder. Correct.\n\nBut note: The expression (3 * p1 + 3 * p2 + 4 * trabalho) may overflow int if notes near 100? Max value: 3*100 + 3*100 + 4*100 = 1000 fits int. So fine.\n\nThus answer: Nenhum defeito encontrado.",
+  "resposta_completa": {
+    "id": "chatcmpl-a3f05405-aeff-43d2-86b3-d1df922ccfe7",
+    "object": "chat.completion",
+    "created": 1794285643,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects where behavior differs from Javadoc.\n\nLet's examine:\n\nMethod calcularMedia: Javadoc says division is integer, fractional part discarded. Implementation does (3*p1 + 3*p2 + 4*trabalho) / 10. That's correct integer division. Validates notes via validarNota which throws IllegalArgumentException if out of range. That's as spec.\n\nPotential issue: No check for overflow? Not needed.\n\nMethod situacao: Javadoc rules: priority order: 1) Frequency below 75% => REPROVADO_FREQUENCIA regardless of media. Implementation checks frequency bounds (0-100) then calculates media (which validates notes). Then if (frequencia < 75) return REPROVADO_FREQUENCIA. That's correct.\n\nThen if media >= 60 => APROVADO. Good.\n\nThen if media >= 40 => EXAME. That includes media 40-59 inclusive. Good.\n\nElse REPROVADO.\n\nPotential defect: It calculates media before checking frequency <75, but that's okay.\n\nEdge cases: Frequency exactly 75% should not be REPROVADO_FREQUENCIA. Implementation checks <75, correct.\n\nMedia boundary: media >=60 approved, correct. Media 59? should be EXAME. Implementation: if media >=40 then EXAME, correct. Media 39 => REPROVADO.\n\nPotential defect: The spec says \"Média a partir de 60 resulta em APROVADO.\" \"A partir de 60\" includes 60. ok.\n\nNow consider validation: calcularMedia validates each note. situacao calls calcularMedia, which validates notes. However situacao also validates frequency only; but does not validate that p1, p2, trabalho are within range before calling calcularMedia? Actually calcularMedia does validation, so fine. The spec says throws IllegalArgumentException if any nota or frequency out of range. That will happen: if note invalid, calcularMedia will throw IllegalArgumentException, but the message may be about nota, not frequency. That's okay.\n\nPotential functional discrepancy: The spec for validarNota says \"Verifica se uma nota está entre 0 e 100, inclusive.\" Implementation does if (nota < 0 || nota > 100) throw IllegalArgumentException. That's correct.\n\nEdge case: In situacao, the spec says frequency from 0 to 100. Implementation validates same.\n\nPotential missing behavior: The Javadoc says \"frequencia abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" Implementation respects that. No other issues.\n\nCheck integer division rounding: Suppose p1=100, p2=100, trabalho=100 => (300+300+400)/10 = 1000/10=100. fine.\n\nBut spec says notes are in décimos de ponto, 0-100 (75 means 7.5). So they are scaled. Implementation uses same.\n\nPotential defect: calcularMedia returns int. Javadoc says return a média, de 0 a 100. correct.\n\nOne possible functional defect: The method situacao does not validate that p1, p2, trabalho are within 0-100 before calling calcularMedia; but since calcularMedia validates, that's fine. However if calcularMedia throws IllegalArgumentException, the situacao's Javadoc says throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100. The thrown exception originates from validarNota inside calcularMedia, but still IllegalArgumentException. So spec satisfied.\n\nPotential missing: The spec order: frequency check first, then media thresholds. Implementation matches.\n\nThus perhaps no functional defects.\n\nDouble-check: The Javadoc for calcularMedia says division inteira: fractional part discarded. In Java, integer division discards remainder. Correct.\n\nBut note: The expression (3 * p1 + 3 * p2 + 4 * trabalho) may overflow int if notes near 100? Max value: 3*100 + 3*100 + 4*100 = 1000 fits int. So fine.\n\nThus answer: Nenhum defeito encontrado."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.208416231,
+      "prompt_tokens": 1252,
+      "prompt_time": 0.051892627,
+      "completion_tokens": 856,
+      "completion_time": 1.787085608,
+      "total_tokens": 2108,
+      "total_time": 1.838978235,
+      "completion_tokens_details": {
+        "reasoning_tokens": 841
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_b1dd3e7a63",
+    "x_groq": {
+      "id": "req_01m71w47s1e0p8cdwbka0j7ns6",
+      "seed": 1637882094
+    },
+    "service_tier": "on_demand"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_numerado.txt",
+  "execucao": 1,
+  "data_hora": "2026-11-10T11:40:21",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_8655ddce88",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.521292384,
+    "prompt_tokens": 1110,
+    "prompt_time": 0.058756909,
+    "completion_tokens": 676,
+    "completion_time": 1.43626346,
+    "total_tokens": 1786,
+    "total_time": 1.4950203690000001,
+    "completion_tokens_details": {
+      "reasoning_tokens": 472
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects vs Javadoc. Let's examine specifications.\n\nJavadoc rules:\n\n1. Free shipping: orders with value >= 20000 centavos inclusive have tariff zero.\n\nCode: line 30: if (valorPedido > 20000) return 0; This uses > not >= . So for valorPedido == 20000, should be free but code will go to other logic. That's a defect: condition incorrect (excessivo). Category: incorreto. Severity: maior (functional bug). Also note that rule says \"a partir de 20000 centavos, inclusive\". So bug.\n\n2. Base tariff for weight <=1000 inclusive is 1500 centavos. Code: line 33 checks <=1000 and returns 1500. That's fine.\n\n3. Above 1000 grams: add base + 300 per each block of 500 grams additional or fraction.\n\nCode: calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: uses integer division by 500, then if remainder not zero, increment blocos; then multiply by 300. This seems correct.\n\nBut note: The spec says \"o valor final cobrado não pode exceder o teto de 4500 centavos.\" Code does not enforce maximum ceiling. So final total may exceed 4500. That's an excess (missing) condition: bug: not applying maximum limit. Category: ausente (missing). Severity: maior.\n\nPotential other issues: Free shipping rule uses > instead of >=, and also maybe they want zero tariff for orders equal to 20000. That's already covered.\n\nAlso check validation: Javadoc says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code matches that. OK.\n\nCheck that calculateFrete returns int. No other.\n\nEdge: What about weight negative? Already validated.\n\nPotential off-by-one in free shipping: they used >, bug.\n\nAlso ensure that maximum is applied after all calculations. Not present. So bug.\n\nAny other mismatches? The Javadoc says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" The code returns total without limiting. So missing.\n\nAlso note that the free shipping condition should be inclusive; bug.\n\nThus two defects.\n\nReturn list enumerated.\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-36723eae-0aac-4dcf-b3b5-d000e80e8ec9",
+    "object": "chat.completion",
+    "created": 1794321624,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 30‑31  \n   Descrição: O método retorna tarifa zero somente quando {@code valorPedido} é **maior** que 20000 centavos. Conforme o Javadoc, pedidos com valor **a partir de 20000 centavos, inclusive**, devem ter tarifa zero. Assim, para {@code valorPedido} = 20000 o método devolve 1500 (ou outro cálculo) ao invés de 0.  \n   Categoria: incorreto  \n   Severidade: maior  \n\n2. Linhas: 38‑39 (e ausência de verificação posterior)  \n   Descrição: O Javadoc especifica que “o valor final cobrado não pode exceder o teto de 4500 centavos”. O código calcula o total (base + adicional) e o devolve sem aplicar esse limite, podendo retornar valores superiores a 4500 centavos.  \n   Categoria: ausente  \n   Severidade: maior",
+          "reasoning": "We need to find functional defects vs Javadoc. Let's examine specifications.\n\nJavadoc rules:\n\n1. Free shipping: orders with value >= 20000 centavos inclusive have tariff zero.\n\nCode: line 30: if (valorPedido > 20000) return 0; This uses > not >= . So for valorPedido == 20000, should be free but code will go to other logic. That's a defect: condition incorrect (excessivo). Category: incorreto. Severity: maior (functional bug). Also note that rule says \"a partir de 20000 centavos, inclusive\". So bug.\n\n2. Base tariff for weight <=1000 inclusive is 1500 centavos. Code: line 33 checks <=1000 and returns 1500. That's fine.\n\n3. Above 1000 grams: add base + 300 per each block of 500 grams additional or fraction.\n\nCode: calculates pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: uses integer division by 500, then if remainder not zero, increment blocos; then multiply by 300. This seems correct.\n\nBut note: The spec says \"o valor final cobrado não pode exceder o teto de 4500 centavos.\" Code does not enforce maximum ceiling. So final total may exceed 4500. That's an excess (missing) condition: bug: not applying maximum limit. Category: ausente (missing). Severity: maior.\n\nPotential other issues: Free shipping rule uses > instead of >=, and also maybe they want zero tariff for orders equal to 20000. That's already covered.\n\nAlso check validation: Javadoc says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code matches that. OK.\n\nCheck that calculateFrete returns int. No other.\n\nEdge: What about weight negative? Already validated.\n\nPotential off-by-one in free shipping: they used >, bug.\n\nAlso ensure that maximum is applied after all calculations. Not present. So bug.\n\nAny other mismatches? The Javadoc says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" The code returns total without limiting. So missing.\n\nAlso note that the free shipping condition should be inclusive; bug.\n\nThus two defects.\n\nReturn list enumerated.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.521292384,
+      "prompt_tokens": 1110,
+      "prompt_time": 0.058756909,
+      "completion_tokens": 676,
+      "completion_time": 1.43626346,
+      "total_tokens": 1786,
+      "total_time": 1.4950203690000001,
+      "completion_tokens_details": {
+        "reasoning_tokens": 472
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_8655ddce88",
+    "x_groq": {
+      "id": "req_01m72ye99xedy9tvmfqa9gtrqc",
+      "seed": 428572939
+    },
+    "service_tier": "on_demand"
+  }
+}

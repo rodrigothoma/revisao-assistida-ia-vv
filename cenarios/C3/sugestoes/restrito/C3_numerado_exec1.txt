@@ -1,0 +1,9 @@
+1. Linhas: 30‑31  
+   Descrição: O método retorna tarifa zero somente quando {@code valorPedido} é **maior** que 20000 centavos. Conforme o Javadoc, pedidos com valor **a partir de 20000 centavos, inclusive**, devem ter tarifa zero. Assim, para {@code valorPedido} = 20000 o método devolve 1500 (ou outro cálculo) ao invés de 0.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 38‑39 (e ausência de verificação posterior)  
+   Descrição: O Javadoc especifica que “o valor final cobrado não pode exceder o teto de 4500 centavos”. O código calcula o total (base + adicional) e o devolve sem aplicar esse limite, podendo retornar valores superiores a 4500 centavos.  
+   Categoria: ausente  
+   Severidade: maior

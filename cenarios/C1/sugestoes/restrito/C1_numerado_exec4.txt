@@ -1,0 +1,14 @@
+1. Linhas: 49‑51  
+   Descrição: A tarifa deve ser zero para permanências de até **15 minutos, inclusive**, porém o código retorna zero apenas para minutos **menores que 15**. Por exemplo, para `minutos = 15` o método retorna 800 em vez de 0.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 30‑38  
+   Descrição: O método `calcularTarifa` não aplica o limite máximo de **3000 centavos** previsto na regra 4. Assim, para tempos suficientemente longos a tarifa pode ultrapassar 3000, violando a especificação.  
+   Categoria: ausente  
+   Severidade: maior  
+
+3. Linhas: 30‑38  
+   Descrição: O desconto de ticket validado (metade da tarifa, arredondada para baixo) é aplicado antes de qualquer limite, enquanto a regra 5 exige que o desconto seja aplicado **após** a aplicação do limite da regra 4. Como o limite nem sequer é aplicado, o desconto ocorre na ordem errada.  
+   Categoria: incorreto  
+   Severidade: maior

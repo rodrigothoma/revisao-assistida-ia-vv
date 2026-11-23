@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_fix_numerado.txt",
+  "execucao": 5,
+  "data_hora": "2026-11-10T01:41:11",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_02b0d31eca",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.244074539,
+    "prompt_tokens": 1252,
+    "prompt_time": 0.055097885,
+    "completion_tokens": 484,
+    "completion_time": 1.010724864,
+    "total_tokens": 1736,
+    "total_time": 1.065822749,
+    "completion_tokens_details": {
+      "reasoning_tokens": 469
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects relative to Javadoc.\n\nCheck calcularMedia: spec says division integer, discarding fraction, correct. It validates each note via validarNota, which throws IllegalArgumentException if out of range. That's as spec. No bug.\n\nCheck situacao: spec rules order priority. Implementation: first checks frequency range; then calculates media via calcularMedia(p1,p2,trabalho). But note: calcularMedia already validates notes and throws IllegalArgumentException if out of range. However situacao Javadoc says throws IllegalArgumentException if any note or frequency out of range. That is satisfied. Then if frequency <75 => REPROVADO_FREQUENCIA (correct). Then if media >=60 => APROVADO (correct). Then if media >=40 => EXAME (covers 40-59 inclusive). Then else REPROVADO (below 40). That matches spec.\n\nPotential edge: media calculation uses integer division discarding fraction. According to spec, media is integer from 0 to 100. For thresholds, using >=60 etc. Since truncation could affect boundary? Eg, actual average 59.9 => integer division gives 59, which results in EXAME per spec? Specification says \"média a partir de 60\" etc. The spec expects the integer average as defined. So okay.\n\nBut maybe bug: calcularMedia returns (3*p1+3*p2+4*trabalho)/10; but spec says notes are in decimos, 0 to 100 meaning 0.0 to 10.0? Not relevant.\n\nCheck that validarNota is private void; fine.\n\nPotential issue: situacao does not validate p1,p2,trabalho before calling calcularMedia? It calls calcularMedia which validates them. So okay.\n\nBut any missing validation for frequency when it's <0 or >100 already done.\n\nThus maybe no functional defects.\n\nCheck edge case: frequency exactly 75 => not REPROVADO_FREQUENCIA (since <75). That's per spec: \"abaixo de 75%\". So okay.\n\nPotential bug: The method situacao returns REPROVADO_FREQUENCIA even if media is out of range? But media calculation would have thrown earlier if notes invalid. So okay.\n\nThus none.\n\nReturn \"Nenhum defeito encontrado.\"",
+  "resposta_completa": {
+    "id": "chatcmpl-8a18f76b-2a95-4a9c-a77f-a66314d54f3c",
+    "object": "chat.completion",
+    "created": 1794285685,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects relative to Javadoc.\n\nCheck calcularMedia: spec says division integer, discarding fraction, correct. It validates each note via validarNota, which throws IllegalArgumentException if out of range. That's as spec. No bug.\n\nCheck situacao: spec rules order priority. Implementation: first checks frequency range; then calculates media via calcularMedia(p1,p2,trabalho). But note: calcularMedia already validates notes and throws IllegalArgumentException if out of range. However situacao Javadoc says throws IllegalArgumentException if any note or frequency out of range. That is satisfied. Then if frequency <75 => REPROVADO_FREQUENCIA (correct). Then if media >=60 => APROVADO (correct). Then if media >=40 => EXAME (covers 40-59 inclusive). Then else REPROVADO (below 40). That matches spec.\n\nPotential edge: media calculation uses integer division discarding fraction. According to spec, media is integer from 0 to 100. For thresholds, using >=60 etc. Since truncation could affect boundary? Eg, actual average 59.9 => integer division gives 59, which results in EXAME per spec? Specification says \"média a partir de 60\" etc. The spec expects the integer average as defined. So okay.\n\nBut maybe bug: calcularMedia returns (3*p1+3*p2+4*trabalho)/10; but spec says notes are in decimos, 0 to 100 meaning 0.0 to 10.0? Not relevant.\n\nCheck that validarNota is private void; fine.\n\nPotential issue: situacao does not validate p1,p2,trabalho before calling calcularMedia? It calls calcularMedia which validates them. So okay.\n\nBut any missing validation for frequency when it's <0 or >100 already done.\n\nThus maybe no functional defects.\n\nCheck edge case: frequency exactly 75 => not REPROVADO_FREQUENCIA (since <75). That's per spec: \"abaixo de 75%\". So okay.\n\nPotential bug: The method situacao returns REPROVADO_FREQUENCIA even if media is out of range? But media calculation would have thrown earlier if notes invalid. So okay.\n\nThus none.\n\nReturn \"Nenhum defeito encontrado.\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.244074539,
+      "prompt_tokens": 1252,
+      "prompt_time": 0.055097885,
+      "completion_tokens": 484,
+      "completion_time": 1.010724864,
+      "total_tokens": 1736,
+      "total_time": 1.065822749,
+      "completion_tokens_details": {
+        "reasoning_tokens": 469
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_02b0d31eca",
+    "x_groq": {
+      "id": "req_01m71w5hxse1hr04pgjqqzteee",
+      "seed": 1775571592
+    },
+    "service_tier": "on_demand"
+  }
+}

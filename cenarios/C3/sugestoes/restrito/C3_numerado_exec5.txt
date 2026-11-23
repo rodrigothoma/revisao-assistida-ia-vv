@@ -1,0 +1,9 @@
+1. Linhas: 30‑31  
+   Descrição: O frete grátis deve ser concedido para pedidos com valor **igual ou superior a** 20000 centavos, conforme o Javadoc. O código retorna 0 somente quando `valorPedido > 20000`, portanto pedidos com valor exatamente 20000 centavos são cobrados erroneamente. Exemplo: `calcularFrete(500, 20000)` deve retornar 0, mas retorna 1500.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 38‑39  
+   Descrição: O Javadoc estabelece que o valor final do frete não pode exceder 4500 centavos. O código calcula `total = 1500 + adicional` e o devolve sem aplicar esse teto, permitindo valores superiores a 4500. Exemplo: `calcularFrete(10000, 15000)` resulta em 6900 centavos, violando a regra do teto.  
+   Categoria: ausente  
+   Severidade: maior

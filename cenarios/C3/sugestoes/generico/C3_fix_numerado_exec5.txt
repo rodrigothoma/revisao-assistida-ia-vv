@@ -1,0 +1,19 @@
+1. Linhas: 5  
+   Descrição: Falta declaração de pacote (`package`) na primeira linha da classe, o que pode causar problemas de organização e conflitos de nomes em projetos maiores.  
+   Categoria: ausente  
+   Severidade: menor  
+
+2. Linhas: 30‑39  
+   Descrição: O método `calcularFrete` utiliza valores numéricos “mágicos” (20000, 1500, 500, 300, 4500) espalhados pelo código. Caso esses limites precisem mudar, será necessário alterar vários pontos, aumentando risco de erros.  
+   Categoria: ausente  
+   Severidade: menor  
+
+3. Linhas: 48‑55  
+   Descrição: O método `validarDadosPedido` não depende de nenhum estado da instância, portanto poderia ser declarado `static`. Mantê‑lo como método de instância é desnecessário e pode confundir quem usa a classe.  
+   Categoria: ausente  
+   Severidade: menor  
+
+4. Linhas: 63‑69  
+   Descrição: O método `calcularAdicionalPeso` assume que o parâmetro `pesoExcedente` é sempre positivo. Se, por algum motivo, ele for chamado com valor negativo (por exemplo, removendo a validação anterior), o cálculo retornará um valor incorreto (blocos negativos). Falta validar o parâmetro.  
+   Categoria: ausente  
+   Severidade: menor

@@ -1,0 +1,9 @@
+1. Linhas: 30‑31  
+   Descrição: O método devolve tarifa zero apenas quando `valorPedido` é **maior** que 20000 centavos. O Javadoc especifica que pedidos com valor **a partir de 20000 centavos, inclusive** devem ter frete grátis. Assim, um pedido de exatamente 20000 centavos ainda será tarifado, divergindo da especificação.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 38‑39  
+   Descrição: Não há implementação da “Garantia de frete máximo” de 4500 centavos descrita no Javadoc. O cálculo retorna `total` (tarifa base + adicional) sem limitar o valor final, permitindo que fretes superiores a 4500 centavos sejam cobrados, o que contraria a especificação.  
+   Categoria: ausente  
+   Severidade: maior

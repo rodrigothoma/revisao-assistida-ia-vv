@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_fix_numerado.txt",
+  "execucao": 3,
+  "data_hora": "2026-11-10T11:40:55",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_4a7bb72c24",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.322347424,
+    "prompt_tokens": 1116,
+    "prompt_time": 0.245054454,
+    "completion_tokens": 772,
+    "completion_time": 1.6285371720000001,
+    "total_tokens": 1888,
+    "total_time": 1.873591626,
+    "completion_tokens_details": {
+      "reasoning_tokens": 757
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects: code not matching Javadoc spec.\n\nRead spec: Rules:\n\n1. Promoção frete grátis: orders with valor >= 20000 centavos inclusive have tarifa zero.\n\nImplementation: line 30 checks >=20000 returns 0. OK.\n\n2. Orders with weight up to 1000g inclusive pay fixed base tariff 1500 cents.\n\nImplementation: if pesoGramas <=1000 return 1500. But this occurs after check for free shipping. However, if valorPedido >=20000 and peso <=1000, rule 1 says zero, which is satisfied because earlier check returns 0. That's fine.\n\n3. Above 1000 grams, sum base plus 300 cents for each block of 500 grams additional or fraction.\n\nImplementation: pesoExcedente = pesoGramas -1000; then calcularAdicionalPeso.\n\ncalculating blocs: int blocos = pesoExcedente / 500; if remainder !=0 then blocos++; return blocos * 300. That matches spec.\n\n4. Max freight: value cannot exceed 4500. Implementation returns Math.min(total,4500). OK.\n\nPotential defects: edge cases: when valorPedido <=0 or peso <=0, validation throws exception, as spec says. Good.\n\nBut note: The free shipping rule says \"valor a partir de 20000 centavos, inclusive, têm tarifa zero.\" The implementation returns 0 even if weight is zero? But weight zero is invalid per validation (must be >0). So fine.\n\nCheck behavior when pesoGramas <=0 but valorPedido >=20000: validation runs before free shipping, will throw exception. Spec says exception if weight <=0 or valor <=0. So correct.\n\nPotential issue: The max freight 4500 includes scenario where base + additional exceed 4500; they clamp. Works.\n\nBut consider scenario where pesoExcedente is negative? Not possible because if pesoGramas>1000 then pesoExcedente positive. So fine.\n\nPotential bug: For peso between 1001 and 1500, pesoExcedente 1..500 -> blocos =0 then remainder !=0 => blocos=1 => additional 300. That's correct (fraction of block counts). For exactly 1500, pesoExcedente=500 => blocos=1 remainder 0 => additional 300. correct.\n\nNow maybe spec says \"cada bloco de 500 gramas adicionais ou fração.\" Implementation matches.\n\nPotential hidden defect: The free shipping rule should ignore weight and max cap maybe? Already returns 0.\n\nEdge case: If valorPedido is exactly 20000 and weight >1000, they return 0 per early return; spec says free shipping, correct.\n\nPotential defect: The method returns int but maybe should return long? Not functional.\n\nMaybe validation message: Not relevant.\n\nThus maybe no defects. Let's double-check: The max freight rule says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" Implementation uses Math.min(total,4500). However, note that for free shipping scenario, total is 0, min(0,4500)=0 fine.\n\nBut consider scenario where pesoGramas <=1000 but free shipping not applicable. It returns 1500 directly, bypassing max cap. 1500 is below cap, fine.\n\nBut what if pesoGramas > 1000 and additional makes total 4800, min -> 4500, correct.\n\nThus no functional defect.\n\nCheck Javadoc of calcularAdicionalPeso: \"Calcula o valor adicional cobrado pelo excesso de peso além de 1000 gramas.\" Implementation correct.\n\nThus answer: Nenhum defeito encontrado.",
+  "resposta_completa": {
+    "id": "chatcmpl-9dc1f044-ee85-4f0f-9433-5b2bf3a62232",
+    "object": "chat.completion",
+    "created": 1794321671,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects: code not matching Javadoc spec.\n\nRead spec: Rules:\n\n1. Promoção frete grátis: orders with valor >= 20000 centavos inclusive have tarifa zero.\n\nImplementation: line 30 checks >=20000 returns 0. OK.\n\n2. Orders with weight up to 1000g inclusive pay fixed base tariff 1500 cents.\n\nImplementation: if pesoGramas <=1000 return 1500. But this occurs after check for free shipping. However, if valorPedido >=20000 and peso <=1000, rule 1 says zero, which is satisfied because earlier check returns 0. That's fine.\n\n3. Above 1000 grams, sum base plus 300 cents for each block of 500 grams additional or fraction.\n\nImplementation: pesoExcedente = pesoGramas -1000; then calcularAdicionalPeso.\n\ncalculating blocs: int blocos = pesoExcedente / 500; if remainder !=0 then blocos++; return blocos * 300. That matches spec.\n\n4. Max freight: value cannot exceed 4500. Implementation returns Math.min(total,4500). OK.\n\nPotential defects: edge cases: when valorPedido <=0 or peso <=0, validation throws exception, as spec says. Good.\n\nBut note: The free shipping rule says \"valor a partir de 20000 centavos, inclusive, têm tarifa zero.\" The implementation returns 0 even if weight is zero? But weight zero is invalid per validation (must be >0). So fine.\n\nCheck behavior when pesoGramas <=0 but valorPedido >=20000: validation runs before free shipping, will throw exception. Spec says exception if weight <=0 or valor <=0. So correct.\n\nPotential issue: The max freight 4500 includes scenario where base + additional exceed 4500; they clamp. Works.\n\nBut consider scenario where pesoExcedente is negative? Not possible because if pesoGramas>1000 then pesoExcedente positive. So fine.\n\nPotential bug: For peso between 1001 and 1500, pesoExcedente 1..500 -> blocos =0 then remainder !=0 => blocos=1 => additional 300. That's correct (fraction of block counts). For exactly 1500, pesoExcedente=500 => blocos=1 remainder 0 => additional 300. correct.\n\nNow maybe spec says \"cada bloco de 500 gramas adicionais ou fração.\" Implementation matches.\n\nPotential hidden defect: The free shipping rule should ignore weight and max cap maybe? Already returns 0.\n\nEdge case: If valorPedido is exactly 20000 and weight >1000, they return 0 per early return; spec says free shipping, correct.\n\nPotential defect: The method returns int but maybe should return long? Not functional.\n\nMaybe validation message: Not relevant.\n\nThus maybe no defects. Let's double-check: The max freight rule says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" Implementation uses Math.min(total,4500). However, note that for free shipping scenario, total is 0, min(0,4500)=0 fine.\n\nBut consider scenario where pesoGramas <=1000 but free shipping not applicable. It returns 1500 directly, bypassing max cap. 1500 is below cap, fine.\n\nBut what if pesoGramas > 1000 and additional makes total 4800, min -> 4500, correct.\n\nThus no functional defect.\n\nCheck Javadoc of calcularAdicionalPeso: \"Calcula o valor adicional cobrado pelo excesso de peso além de 1000 gramas.\" Implementation correct.\n\nThus answer: Nenhum defeito encontrado."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.322347424,
+      "prompt_tokens": 1116,
+      "prompt_time": 0.245054454,
+      "completion_tokens": 772,
+      "completion_time": 1.6285371720000001,
+      "total_tokens": 1888,
+      "total_time": 1.873591626,
+      "completion_tokens_details": {
+        "reasoning_tokens": 757
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_4a7bb72c24",
+    "x_groq": {
+      "id": "req_01m72yfpqbeyvtj9e5fdwajcag",
+      "seed": 851769891
+    },
+    "service_tier": "on_demand"
+  }
+}

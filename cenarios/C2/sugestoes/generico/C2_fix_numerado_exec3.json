@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_fix_numerado.txt",
+  "execucao": 3,
+  "data_hora": "2026-11-10T01:41:54",
+  "prompt": "prompt_generico.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_dee443f41b",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.248838343,
+    "prompt_tokens": 1194,
+    "prompt_time": 0.056972284,
+    "completion_tokens": 847,
+    "completion_time": 1.75934842,
+    "total_tokens": 2041,
+    "total_time": 1.816320704,
+    "completion_tokens_details": {
+      "reasoning_tokens": 833
+    }
+  },
+  "raciocinio_modelo": "We need to review code, list problems with lines, description, category (ausente, incorreto, excedente), severity (maior/menor). Identify issues: missing null checks? Not applicable for primitives. Javadoc: return type description maybe missing for situacao? Javadoc mentions @return a situação final - ok. Maybe missing @throws for validarNota not part of public API, but okay.\n\nPotential logical issues: calcularMedia uses integer division discarding fraction, but description says \"divisão inteira: a parte fracionária é descartada.\" That's correct.\n\nBut there is missing validation of p1, p2, trabalho in situacao method before calling calcularMedia; however calcularMedia validates them, but frequencia validated separately. So okay.\n\nPotential problem: enum naming: REPROVADO_FREQUENCIA maybe better REPROVADO_POR_FREQUENCIA but not an error.\n\nEdge cases: frequency exactly 75 leads to not REPROVADO_FREQUENCIA, okay.\n\nPotential issue: The Javadoc for calcularMedia says @throws IllegalArgumentException se alguma nota estiver fora de 0 a 100, correct.\n\nPotential issue: The class is public but not final; okay.\n\nPotential issue: The method situacao does not validate p1, p2, trabalho beyond calling calcularMedia which validates, but if calcularMedia throws, situacao will propagate IllegalArgumentException; Javadoc says @throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100, correct.\n\nPotential issue: The enum values are all caps, fine.\n\nPotential issue: In validarNota method, exception message \"nota invalida\" missing accent but not required.\n\nPotential issue: The class lacks a private constructor; not needed.\n\nPotential issue: The Javadoc says notes are in décimos de ponto, 0-100 where 75 means 7.5; but code treats as integer 0-100, fine.\n\nMaybe there is a missing check for null in enum? Not.\n\nPotential style issues: Missing @param description for situacao regarding order of priority? fine.\n\nMaybe the method situacao does not handle negative frequencies already; done.\n\nPotential problem: The method situacao does not validate p1,p2,trabalho range before calling calcularMedia? It does via that call, but if they are invalid, calcularMedia will throw IllegalArgumentException, which is okay.\n\nPotential problem: The Javadoc for situacao has @throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100 - correct.\n\nPotential issue: The enum includes REPROVADO_FREQUENCIA but rule says \"Frequência abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" That's correct.\n\nMaybe the code uses int for frequency, but percentages could be float; but spec says integer.\n\nPotential missing validation for null on enum? Not.\n\nMaybe there is an off-by-one: frequency 0-100 inclusive, fine.\n\nPotential issue: The class name is AvaliacaoDisciplina but Javadoc says \"Calcula a média e a situação final dos alunos de uma disciplina.\" ok.\n\nThus maybe no problems, but we need to be thorough.\n\nCheck line numbers for any formatting errors: The Javadoc lines maybe need proper alignment but not required.\n\nPotential problem: The method calcularMedia returns int 0-100 but if inputs are 0-100, max numerator: 3*100+3*100+4*100=1000, divided by 10 = 100, ok.\n\nPotential overflow? int safe.\n\nThus likely no issues.\n\nBut we could mention minor style: missing final modifier for class, could be minor but not required.\n\nCategory: ausente (missing) maybe missing @Override annotation? Not overriding.\n\nMaybe missing validation that p1,p2,trabalho are ints but could be negative; handled.\n\nPotential problem: The Javadoc for calcularMedia says \"divisão inteira: a parte fracionária é descartada.\" However integer division in Java does discard remainder, correct.\n\nThus I think \"Nenhum problema encontrado.\"",
+  "resposta_completa": {
+    "id": "chatcmpl-4bf097f9-4b15-4f31-9845-e5b3c50d93f7",
+    "object": "chat.completion",
+    "created": 1794285730,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum problema encontrado.",
+          "reasoning": "We need to review code, list problems with lines, description, category (ausente, incorreto, excedente), severity (maior/menor). Identify issues: missing null checks? Not applicable for primitives. Javadoc: return type description maybe missing for situacao? Javadoc mentions @return a situação final - ok. Maybe missing @throws for validarNota not part of public API, but okay.\n\nPotential logical issues: calcularMedia uses integer division discarding fraction, but description says \"divisão inteira: a parte fracionária é descartada.\" That's correct.\n\nBut there is missing validation of p1, p2, trabalho in situacao method before calling calcularMedia; however calcularMedia validates them, but frequencia validated separately. So okay.\n\nPotential problem: enum naming: REPROVADO_FREQUENCIA maybe better REPROVADO_POR_FREQUENCIA but not an error.\n\nEdge cases: frequency exactly 75 leads to not REPROVADO_FREQUENCIA, okay.\n\nPotential issue: The Javadoc for calcularMedia says @throws IllegalArgumentException se alguma nota estiver fora de 0 a 100, correct.\n\nPotential issue: The class is public but not final; okay.\n\nPotential issue: The method situacao does not validate p1, p2, trabalho beyond calling calcularMedia which validates, but if calcularMedia throws, situacao will propagate IllegalArgumentException; Javadoc says @throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100, correct.\n\nPotential issue: The enum values are all caps, fine.\n\nPotential issue: In validarNota method, exception message \"nota invalida\" missing accent but not required.\n\nPotential issue: The class lacks a private constructor; not needed.\n\nPotential issue: The Javadoc says notes are in décimos de ponto, 0-100 where 75 means 7.5; but code treats as integer 0-100, fine.\n\nMaybe there is a missing check for null in enum? Not.\n\nPotential style issues: Missing @param description for situacao regarding order of priority? fine.\n\nMaybe the method situacao does not handle negative frequencies already; done.\n\nPotential problem: The method situacao does not validate p1,p2,trabalho range before calling calcularMedia? It does via that call, but if they are invalid, calcularMedia will throw IllegalArgumentException, which is okay.\n\nPotential problem: The Javadoc for situacao has @throws IllegalArgumentException se alguma nota ou a frequência estiver fora de 0 a 100 - correct.\n\nPotential issue: The enum includes REPROVADO_FREQUENCIA but rule says \"Frequência abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" That's correct.\n\nMaybe the code uses int for frequency, but percentages could be float; but spec says integer.\n\nPotential missing validation for null on enum? Not.\n\nMaybe there is an off-by-one: frequency 0-100 inclusive, fine.\n\nPotential issue: The class name is AvaliacaoDisciplina but Javadoc says \"Calcula a média e a situação final dos alunos de uma disciplina.\" ok.\n\nThus maybe no problems, but we need to be thorough.\n\nCheck line numbers for any formatting errors: The Javadoc lines maybe need proper alignment but not required.\n\nPotential problem: The method calcularMedia returns int 0-100 but if inputs are 0-100, max numerator: 3*100+3*100+4*100=1000, divided by 10 = 100, ok.\n\nPotential overflow? int safe.\n\nThus likely no issues.\n\nBut we could mention minor style: missing final modifier for class, could be minor but not required.\n\nCategory: ausente (missing) maybe missing @Override annotation? Not overriding.\n\nMaybe missing validation that p1,p2,trabalho are ints but could be negative; handled.\n\nPotential problem: The Javadoc for calcularMedia says \"divisão inteira: a parte fracionária é descartada.\" However integer division in Java does discard remainder, correct.\n\nThus I think \"Nenhum problema encontrado.\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.248838343,
+      "prompt_tokens": 1194,
+      "prompt_time": 0.056972284,
+      "completion_tokens": 847,
+      "completion_time": 1.75934842,
+      "total_tokens": 2041,
+      "total_time": 1.816320704,
+      "completion_tokens_details": {
+        "reasoning_tokens": 833
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_dee443f41b",
+    "x_groq": {
+      "id": "req_01m71w6wswetstnk1czgg57brn",
+      "seed": 1036460100
+    },
+    "service_tier": "on_demand"
+  }
+}

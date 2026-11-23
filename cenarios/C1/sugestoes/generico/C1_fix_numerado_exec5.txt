@@ -1,0 +1,14 @@
+1. Linhas: 59‑60  
+   Descrição: O cálculo `TARIFA_PRIMEIRA_HORA + horas * TARIFA_HORA_ADICIONAL` pode overflowar o tipo `int` quando o parâmetro `minutos` for muito grande (por exemplo, `Integer.MAX_VALUE`). O overflow produz um valor negativo ou incorreto antes da verificação `if (tarifa > TARIFA_MAXIMA)`, resultando em exceção ou tarifa errada.  
+   Categoria: ausente (faltam verificações ou uso de tipo maior, como `long`, para evitar overflow).  
+   Severidade: maior  
+
+2. Linhas: 70‑71  
+   Descrição: O Javadoc de `horasAdicionais` declara que o parâmetro `minutosExcedentes` deve ser “maior que zero”, porém o método aceita `0` e retornaria `0`. A documentação está incorreta em relação ao comportamento real.  
+   Categoria: incorreto (documentação divergente do código).  
+   Severidade: menor  
+
+3. Linhas: 53‑57, 59‑60, 71  
+   Descrição: O código contém valores literais “mágicos” (15, 60, 59) espalhados pelos métodos, dificultando manutenção e leitura. Esses números deveriam ser declarados como constantes nomeadas, por exemplo `MINUTOS_GRATIS`, `MINUTOS_PRIMEIRA_HORA`, etc.  
+   Categoria: excedente (faltam boas práticas de legibilidade).  
+   Severidade: menor

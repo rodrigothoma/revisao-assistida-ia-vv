@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "Se usar este material, cite o artigo e o pacote de replicação."
+title: "Pacote de replicação: Revisão assistida por IA em Verificação e Validação: eficiência e detecção de defeitos frente à revisão humana"
+type: dataset
+version: "1.0"
+license: "CC-BY-4.0 AND MIT"
+# Preencher depois da release v1.0 no GitHub, com o DOI gerado pelo Zenodo:
+# doi: 10.5281/zenodo.XXXXXXX
+authors:
+  - family-names: Kraemer
+    given-names: Artur Wahlbrink
+    affiliation: Universidade Federal do Pampa
+  - family-names: Kanaan
+    given-names: Fade Hassan Husein
+    affiliation: Universidade Federal do Pampa
+  - family-names: Ortiz
+    given-names: Gabriel Camargo
+    affiliation: Universidade Federal do Pampa
+  - family-names: Anjos
+    given-names: Gustavo Fernandes dos
+    affiliation: Universidade Federal do Pampa
+  - family-names: Cabral
+    given-names: Matheus Domingues
+    affiliation: Universidade Federal do Pampa
+  - family-names: Silva
+    given-names: Rodrigo Thoma da
+    affiliation: Universidade Federal do Pampa
+keywords:
+  - Verificação e Validação
+  - revisão de código
+  - inspeção de software
+  - modelos de linguagem
+  - gpt-oss-120b

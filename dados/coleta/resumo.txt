@@ -1,0 +1,22 @@
+T_H = 634 s (10:34); T_A = 917 s (15:17); E_liq = -44.7%
+medianas: H 8:15; A 16:58
+revisões > 15 min: H 1; A 5
+  C1: T_H 10:27  T_A 11:44  E_liq -12.4%
+  C2: T_H 10:33  T_A 11:12  E_liq -6.2%
+  C3: T_H 15:32  T_A 18:52  E_liq -21.3%
+  C4: T_H 5:42  T_A 19:19  E_liq -239.4%
+  R1: sessão de 53:05
+  R2: sessão de 51:07
+  R3: sessão de 42:34
+  R4: sessão de 59:56
+EDE H = 9/16
+EDE A = 8/16
+EDE A coberto = 6/8; não coberto = 2/8
+  sem R3/C1: A 8/14; coberto 6/7; não coberto 2/7
+  creditando VP aceitos e não relatados [('R3', 'C1'), ('R3', 'C3')]: A 10/16; coberto 8/8; não coberto 2/8
+sem a 1ª revisão: T_H 10:03; T_A 13:49; E_liq -37.6%
+EDE H por tipo: d1 6/8; d2 3/8
+VPP H = 9/10 (90%)
+VPP A = 8/10 (80%)
+FP aceitos na triagem: 3/8 (posição 1: 1/4; posição 2: 2/4)
+VP descartados na triagem: 0/8; VP aceitos e ausentes do relatório: 2

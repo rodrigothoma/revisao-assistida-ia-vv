@@ -1,0 +1,74 @@
+ 1 | /**
+ 2 |  * Calcula a multa por atraso na devolução de livros de uma biblioteca universitária.
+ 3 |  * Todos os valores são expressos em centavos de real.
+ 4 |  */
+ 5 | public class CalculadoraMulta {
+ 6 | 
+ 7 |     /**
+ 8 |      * Calcula o valor da multa a ser cobrada pelo atraso na devolução de um exemplar.
+ 9 |      *
+10 |      * <p>Regras:</p>
+11 |      * <ol>
+12 |      *   <li>Atraso de até 3 dias, inclusive: multa de 200 centavos por dia de atraso.</li>
+13 |      *   <li>Atraso a partir de 4 dias: os 3 primeiros dias pagam a tarifa base
+14 |      *       de 200 centavos por dia e cada dia adicional subsequente paga
+15 |      *       350 centavos por dia.</li>
+16 |      *   <li>Exemplar de reserva técnica ({@code ehExemplarReserva} verdadeiro):
+17 |      *       o valor total da multa calculada é multiplicado por 2.</li>
+18 |      *   <li>Atraso superior a 120 dias ou menor ou igual a zero lança
+19 |      *       {@code IllegalArgumentException}.</li>
+20 |      * </ol>
+21 |      *
+22 |      * @param diasAtraso número de dias corridos em atraso
+23 |      * @param ehExemplarReserva indica se o exemplar pertence à reserva técnica
+24 |      * @return o valor total da multa a ser cobrada, em centavos
+25 |      * @throws IllegalArgumentException se {@code diasAtraso} for menor ou igual
+26 |      *         a zero ou superior a 120
+27 |      */
+28 |     public int calcularMulta(int diasAtraso, boolean ehExemplarReserva) {
+29 |         validarDiasAtraso(diasAtraso);
+30 |         int valorBase = calcularValorBase(diasAtraso);
+31 |         return aplicarRegraReserva(valorBase, ehExemplarReserva);
+32 |     }
+33 | 
+34 |     /**
+35 |      * Valida os limites permitidos para os dias de atraso.
+36 |      *
+37 |      * @param diasAtraso número de dias em atraso
+38 |      */
+39 |     private void validarDiasAtraso(int diasAtraso) {
+40 |         if (diasAtraso <= 0) {
+41 |             throw new IllegalArgumentException("Dias de atraso devem ser maiores que zero.");
+42 |         }
+43 |         if (diasAtraso > 120) {
+44 |             throw new IllegalArgumentException("Período máximo de atraso excedido.");
+45 |         }
+46 |     }
+47 | 
+48 |     /**
+49 |      * Calcula o valor base da multa antes da aplicação de eventuais multiplicadores.
+50 |      *
+51 |      * @param diasAtraso número de dias em atraso
+52 |      * @return o valor base da multa, em centavos
+53 |      */
+54 |     private int calcularValorBase(int diasAtraso) {
+55 |         if (diasAtraso <= 3) {
+56 |             return diasAtraso * 200;
+57 |         }
+58 |         return (3 * 200) + ((diasAtraso - 3) * 350);
+59 |     }
+60 | 
+61 |     /**
+62 |      * Aplica o multiplicador caso o livro seja de reserva técnica.
+63 |      *
+64 |      * @param valorBase valor base da multa em centavos
+65 |      * @param ehExemplarReserva indicador de exemplar de reserva técnica
+66 |      * @return o valor final após aplicação da regra de reserva, em centavos
+67 |      */
+68 |     private int aplicarRegraReserva(int valorBase, boolean ehExemplarReserva) {
+69 |         if (ehExemplarReserva) {
+70 |             return valorBase * 2;
+71 |         }
+72 |         return valorBase;
+73 |     }
+74 | }

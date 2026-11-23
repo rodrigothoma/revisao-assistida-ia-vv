@@ -1,0 +1,24 @@
+1. Linhas: 55‑58  
+   Descrição: O método **calcularValorBase** utiliza valores numéricos “mágicos” (200, 350, 3) diretamente no cálculo, dificultando a manutenção e a compreensão das regras de negócio. Caso os valores das tarifas ou o número de dias de tarifa base mudem, será necessário alterar o código em vários pontos.  
+   Categoria: ausente (faltam constantes nomeadas)  
+   Severidade: menor  
+
+2. Linhas: 54‑73  
+   Descrição: Os métodos **calcularValorBase**, **aplicarRegraReserva** e **validarDiasAtraso** não dependem de nenhum estado da instância; eles poderiam ser declarados como **static**, evitando a necessidade de criar objetos desnecessários da classe **CalculadoraMulta**.  
+   Categoria: ausente (métodos que poderiam ser estáticos)  
+   Severidade: menor  
+
+3. Linhas: 5  
+   Descrição: A classe não está declarada dentro de um **package**. Em projetos Java convencionais, classes de aplicação devem pertencer a um pacote explícito para evitar conflitos de namespace e melhorar a organização.  
+   Categoria: ausente (declaração de pacote)  
+   Severidade: menor  
+
+4. Linhas: 55‑58  
+   Descrição: O cálculo pode gerar **overflow** se, no futuro, as regras de negócio forem alteradas para permitir um número maior de dias ou tarifas mais altas, já que o retorno é `int`. Embora o intervalo atual (até 120 dias) esteja dentro dos limites do tipo `int`, a escolha de `int` não oferece margem de segurança.  
+   Categoria: ausente (tipo de retorno inadequado para possíveis expansões)  
+   Severidade: menor  
+
+5. Linhas: 68‑72  
+   Descrição: O método **aplicarRegraReserva** multiplica o valor base por 2 quando o livro é de reserva técnica. Caso o valor base já esteja próximo do limite máximo de `int`, a multiplicação pode resultar em **overflow silencioso**. Seria mais seguro usar `long` para o cálculo ou validar o resultado antes de retornar.  
+   Categoria: ausente (verificação de overflow)  
+   Severidade: menor

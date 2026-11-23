@@ -1,0 +1,61 @@
+{
+  "unidade": "C2_fix_numerado.txt",
+  "execucao": 2,
+  "data_hora": "2026-11-10T01:41:39",
+  "prompt": "prompt_generico.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_69334c0be3",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.306301956,
+    "prompt_tokens": 1194,
+    "prompt_time": 0.07210379,
+    "completion_tokens": 1049,
+    "completion_time": 2.179828474,
+    "total_tokens": 2243,
+    "total_time": 2.251932264,
+    "completion_tokens_details": {
+      "reasoning_tokens": 1035
+    }
+  },
+  "raciocinio_modelo": "We need to review code and point out problems with line numbers, description, category (ausente, incorreto ou excedente), severity (maior, menor). Need to list problems numbered in order they appear. Let's examine.\n\nPotential issues:\n\n- Javadoc: description says \"As notas são em décimos de ponto, de 0 a 100 (75 significa 7,5).\" That suggests they are in tenths but code treats as integer 0-100 directly. Might be okay.\n\n- The enum includes REPROVADO_FREQUENCIA which is fine.\n\n- validarNota method is private, used in calcularMedia, but situacao method does not call validarNota for frequencia (already validated). But it also does not validate p1, p2, trabalho before calling calcularMedia (which does). So okay.\n\nPotential issues:\n\n- calcularMedia returns integer division; per spec: \"divisão inteira: a parte fracionária é descartada.\" That's okay.\n\n- However, the spec says \"média final do aluno\" and returns int 0-100. If inputs are valid, result will be within range? Let's test extremes: max 100 each, then (3*100+3*100+4*100)/10 = (300+300+400)/10=1000/10=100, ok. Minimum 0 =>0.\n\n- Might be missing null checks? Not applicable.\n\n- Could be missing validation for negative frequencies already done.\n\n- The Javadoc of situacao mentions \"se alguma nota ou a frequência estiver fora de 0 a 100\". It validates p1,p2, trabalho indirectly via calcularMedia which throws IllegalArgumentException if any invalid. So okay.\n\n- However, situacao method does not catch IllegalArgumentException from calcularMedia; it's okay to propagate.\n\n- The enum values naming maybe inconsistent with Java naming conventions: constants are fine.\n\n- The class is missing a private constructor? Not needed.\n\n- The Javadoc uses @throws but not @param for return? fine.\n\nPotential subtle issue: The method situacao uses media >= 60 to approve, but spec says \"Média a partir de 60 resulta em APROVADO.\" That's correct. Then \"Média de 40 a 59 resulta em EXAME.\" Implementation uses if (media >= 40) after previous if; that includes media 60-... Actually after previous condition, media<60. So condition media>=40 picks 40-59 inclusive. Good. Then else REPROVADO for <40.\n\n- Frequency validation uses int; but frequency could be decimal? spec says integer percent. fine.\n\n- The Javadoc says \"Frequência abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" Implementation does that before checking media. correct.\n\nPotential missing: The method validarNota is private void; could be static since it does not use instance state. Not a bug but could be improvement. Category maybe \"excedente\"? Not necessarily.\n\n- Another issue: The class does not have any package declaration; maybe okay.\n\n- The Javadoc of class line 2: \"Calcula a média e a situação final dos alunos de uma disciplina.\" fine.\n\n- Potential issue: The enum name Situacao includes \"REPROVADO_FREQUENCIA\". In Java naming conventions, constants are uppercase with underscores. That's fine.\n\n- Edge case: The method calcularMedia does not check for overflow, but int multiplication of up to 400*100? Actually 4*100 =400, plus 3*100 etc total 1000, within int.\n\n- Perhaps missing @Override? Not relevant.\n\n- The method validarNota throws IllegalArgumentException with message \"nota invalida: \". Could be spelled \"inválida\" with accent, but not bug.\n\n- Could be missing validation for null on enum? Not.\n\nThus maybe few issues: No validation for null arguments (primitives can't be null). No need.\n\nPotential issue: The Javadoc of calcularMedia says \"@return a média, de 0 a 100\". But integer division could give result up to 99? Actually 100 max. fine.\n\nMaybe the biggest problem: The method situacao does not validate p1, p2, trabalho for being within range before calling calcularMedia? It does indirectly because calcularMedia calls validarNota for each. That's okay. However, the Javadoc says it throws IllegalArgumentException if any note or frequency out of range. That's true because calcularMedia will throw for notes. So ok.\n\nMaybe there is a missing validation for negative frequency earlier (done). Good.\n\nMaybe issue: The method validarNota is private void but could be static; not a bug.\n\nThus maybe only minor style issues: The enum constant REPROVADO_FREQUENCIA may be considered \"excedente\" because could be just REPROVADO? But spec requires it.\n\nThus maybe there are no functional problems. Could note that the class does not enforce immutability, but not needed.\n\nThus answer: \"Nenhum problema encontrado.\"",
+  "resposta_completa": {
+    "id": "chatcmpl-5191af74-e4cb-48aa-8962-673317e5fa09",
+    "object": "chat.completion",
+    "created": 1794285714,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum problema encontrado.",
+          "reasoning": "We need to review code and point out problems with line numbers, description, category (ausente, incorreto ou excedente), severity (maior, menor). Need to list problems numbered in order they appear. Let's examine.\n\nPotential issues:\n\n- Javadoc: description says \"As notas são em décimos de ponto, de 0 a 100 (75 significa 7,5).\" That suggests they are in tenths but code treats as integer 0-100 directly. Might be okay.\n\n- The enum includes REPROVADO_FREQUENCIA which is fine.\n\n- validarNota method is private, used in calcularMedia, but situacao method does not call validarNota for frequencia (already validated). But it also does not validate p1, p2, trabalho before calling calcularMedia (which does). So okay.\n\nPotential issues:\n\n- calcularMedia returns integer division; per spec: \"divisão inteira: a parte fracionária é descartada.\" That's okay.\n\n- However, the spec says \"média final do aluno\" and returns int 0-100. If inputs are valid, result will be within range? Let's test extremes: max 100 each, then (3*100+3*100+4*100)/10 = (300+300+400)/10=1000/10=100, ok. Minimum 0 =>0.\n\n- Might be missing null checks? Not applicable.\n\n- Could be missing validation for negative frequencies already done.\n\n- The Javadoc of situacao mentions \"se alguma nota ou a frequência estiver fora de 0 a 100\". It validates p1,p2, trabalho indirectly via calcularMedia which throws IllegalArgumentException if any invalid. So okay.\n\n- However, situacao method does not catch IllegalArgumentException from calcularMedia; it's okay to propagate.\n\n- The enum values naming maybe inconsistent with Java naming conventions: constants are fine.\n\n- The class is missing a private constructor? Not needed.\n\n- The Javadoc uses @throws but not @param for return? fine.\n\nPotential subtle issue: The method situacao uses media >= 60 to approve, but spec says \"Média a partir de 60 resulta em APROVADO.\" That's correct. Then \"Média de 40 a 59 resulta em EXAME.\" Implementation uses if (media >= 40) after previous if; that includes media 60-... Actually after previous condition, media<60. So condition media>=40 picks 40-59 inclusive. Good. Then else REPROVADO for <40.\n\n- Frequency validation uses int; but frequency could be decimal? spec says integer percent. fine.\n\n- The Javadoc says \"Frequência abaixo de 75% resulta em REPROVADO_FREQUENCIA, qualquer que seja a média.\" Implementation does that before checking media. correct.\n\nPotential missing: The method validarNota is private void; could be static since it does not use instance state. Not a bug but could be improvement. Category maybe \"excedente\"? Not necessarily.\n\n- Another issue: The class does not have any package declaration; maybe okay.\n\n- The Javadoc of class line 2: \"Calcula a média e a situação final dos alunos de uma disciplina.\" fine.\n\n- Potential issue: The enum name Situacao includes \"REPROVADO_FREQUENCIA\". In Java naming conventions, constants are uppercase with underscores. That's fine.\n\n- Edge case: The method calcularMedia does not check for overflow, but int multiplication of up to 400*100? Actually 4*100 =400, plus 3*100 etc total 1000, within int.\n\n- Perhaps missing @Override? Not relevant.\n\n- The method validarNota throws IllegalArgumentException with message \"nota invalida: \". Could be spelled \"inválida\" with accent, but not bug.\n\n- Could be missing validation for null on enum? Not.\n\nThus maybe few issues: No validation for null arguments (primitives can't be null). No need.\n\nPotential issue: The Javadoc of calcularMedia says \"@return a média, de 0 a 100\". But integer division could give result up to 99? Actually 100 max. fine.\n\nMaybe the biggest problem: The method situacao does not validate p1, p2, trabalho for being within range before calling calcularMedia? It does indirectly because calcularMedia calls validarNota for each. That's okay. However, the Javadoc says it throws IllegalArgumentException if any note or frequency out of range. That's true because calcularMedia will throw for notes. So ok.\n\nMaybe there is a missing validation for negative frequency earlier (done). Good.\n\nMaybe issue: The method validarNota is private void but could be static; not a bug.\n\nThus maybe only minor style issues: The enum constant REPROVADO_FREQUENCIA may be considered \"excedente\" because could be just REPROVADO? But spec requires it.\n\nThus maybe there are no functional problems. Could note that the class does not enforce immutability, but not needed.\n\nThus answer: \"Nenhum problema encontrado.\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.306301956,
+      "prompt_tokens": 1194,
+      "prompt_time": 0.07210379,
+      "completion_tokens": 1049,
+      "completion_time": 2.179828474,
+      "total_tokens": 2243,
+      "total_time": 2.251932264,
+      "completion_tokens_details": {
+        "reasoning_tokens": 1035
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_69334c0be3",
+    "x_groq": {
+      "id": "req_01m71w6c7fe17tesy4jj8qvsj2",
+      "seed": 197345332
+    },
+    "service_tier": "on_demand"
+  }
+}

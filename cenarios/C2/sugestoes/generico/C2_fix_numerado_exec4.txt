@@ -1,0 +1,4 @@
+1. Linhas: 72‑76  
+   Descrição: o método `validarNota` não depende de estado da instância; poderia ser declarado `static`, evitando a necessidade de criar um objeto apenas para utilizá‑lo.  
+   Categoria: excedente (método não precisa ser de instância)  
+   Severidade: menor.

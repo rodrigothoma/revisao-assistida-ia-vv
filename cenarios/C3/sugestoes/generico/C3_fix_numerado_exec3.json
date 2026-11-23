@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_fix_numerado.txt",
+  "execucao": 3,
+  "data_hora": "2026-11-10T11:42:17",
+  "prompt": "prompt_generico.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_4727af4560",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.310490237,
+    "prompt_tokens": 1058,
+    "prompt_time": 0.064899645,
+    "completion_tokens": 1099,
+    "completion_time": 2.312593083,
+    "total_tokens": 2157,
+    "total_time": 2.377492728,
+    "completion_tokens_details": {
+      "reasoning_tokens": 728
+    }
+  },
+  "raciocinio_modelo": "We need to review the code, find issues. Look at Javadoc vs implementation. Check for off-by-one, rules. Rule: \"Acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" Implementation: pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: blocos = pesoExcedente / 500; if remainder !=0, blocos++; return blocos*300. This matches rule.\n\nCheck free shipping: valorPedido >= 20000 returns 0, correct.\n\nCheck max cap: Math.min(total,4500) correct.\n\nPotential issues: The method validarDadosPedido throws IllegalArgumentException for peso <=0 or valor <=0. But free shipping rule says orders >=20000 get zero, but if valorPedido is 0? Should be invalid, but rule maybe allows zero? Not needed.\n\nPotential integer overflow? Not likely.\n\nPotential missing null? primitives.\n\nPotential issue: calcularAdicionalPeso should handle negative pesoExcedente (if called incorrectly). But only called when pesoGramas > 1000, so positive.\n\nPotential Javadoc mismatch: The Javadoc says \"valor máximo ... teto de 4500 centavos.\" Implementation uses Math.min(total,4500) which caps. Good.\n\nPotential bug: If pesoGramas = 1001, pesoExcedente = 1, blocos = 0, remainder !=0 => blocos=1, adicional=300, total=1800, ok.\n\nPotential missing handling for pesoGramas exactly 1000 returns 1500 (rule says inclusive). Good.\n\nPotential performance not an issue.\n\nMaybe issue: The class is not final, could be extended - not a problem.\n\nPotential issue: The method calcularFrete returns int, but could exceed int? Not.\n\nPotential issue: The Javadoc @throws mentions IllegalArgumentException if pesoGramas <=0 OR valorPedido <=0. Implementation matches.\n\nPotential style: Use of magic numbers (20000,1500,500,300,4500) should be constants. Category: ausente (should be constants). Severity: menor.\n\nPotential issue: No handling for negative pesoExcedente leading to negative adicional if weight less than 1000 (but method not called). But if future change, might be issue. Could be considered robust.\n\nPotential issue: The method validarDadosPedido is private but could be static. Not a bug.\n\nPotential issue: The Javadoc says \"frete máximo: o valor final cobrado não pode exceder o teto de 4500 centavos.\" Implementation uses Math.min(total,4500) but does not consider that base 1500 + adicional could be less than 4500 but still exceed if free shipping? Not relevant.\n\nPotential issue: The code does not consider that free shipping overrides max cap (returns 0). That's fine.\n\nPotential issue: No handling for overflow of multiplication (blocos*300) if pesoExcedente huge. Could overflow int. Should use long or check. Severity: menor but could cause malfunction for extreme inputs. Category: ausente (check overflow).\n\nPotential issue: The class does not have a package declaration, but not necessarily error.\n\nPotential issue: The Javadoc for calcularFrete mentions \"bloco de 500 gramas adicionais ou fração\" - code implements correctly.\n\nThus list issues: magic numbers, potential overflow, method could be static, missing final, no null check not needed.\n\nWe'll list maybe 3 issues.\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-76b3da89-f570-404c-b758-f00ce16f80b6",
+    "object": "chat.completion",
+    "created": 1794321750,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1. Linhas: 5, 28, 30, 33, 36, 38, 39, 63, 64, 68  \n   Descrição: Uso de valores “mágicos” (20000, 1500, 500, 300, 4500) espalhados pelo código. Caso algum valor de regra precise ser alterado, o risco de esquecer alguma ocorrência aumenta e dificulta a manutenção.  \n   Categoria: ausente (deveria haver constantes nomeadas, por ex.: LIMITE_GRATIS, TARIFA_BASE, BLOCO_PESO, VALOR_BLOCO, TETO_MAXIMO).  \n   Severidade: menor.\n\n2. Linhas: 64, 68  \n   Descrição: O cálculo `blocos * 300` pode gerar overflow de `int` se `pesoExcedente` for muito grande (por exemplo, peso de 2 147 483 647 g). Embora situações reais provavelmente não atinjam esse valor, a falta de proteção pode levar a resultado negativo ou incorreto.  \n   Categoria: ausente (não há verificação de overflow ou uso de tipo maior).  \n   Severidade: menor.\n\n3. Linhas: 48‑55, 63‑69  \n   Descrição: Os métodos `validarDadosPedido` e `calcularAdicionalPeso` não precisam acessar estado da instância; poderiam ser declarados `static`. Mantê‑los como instância não causa erro, mas indica oportunidade de melhorar a clareza e evitar a necessidade de criar objetos desnecessários.  \n   Categoria: excedente (declaração de método de instância onde o `static` seria mais adequado).  \n   Severidade: menor.",
+          "reasoning": "We need to review the code, find issues. Look at Javadoc vs implementation. Check for off-by-one, rules. Rule: \"Acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" Implementation: pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso: blocos = pesoExcedente / 500; if remainder !=0, blocos++; return blocos*300. This matches rule.\n\nCheck free shipping: valorPedido >= 20000 returns 0, correct.\n\nCheck max cap: Math.min(total,4500) correct.\n\nPotential issues: The method validarDadosPedido throws IllegalArgumentException for peso <=0 or valor <=0. But free shipping rule says orders >=20000 get zero, but if valorPedido is 0? Should be invalid, but rule maybe allows zero? Not needed.\n\nPotential integer overflow? Not likely.\n\nPotential missing null? primitives.\n\nPotential issue: calcularAdicionalPeso should handle negative pesoExcedente (if called incorrectly). But only called when pesoGramas > 1000, so positive.\n\nPotential Javadoc mismatch: The Javadoc says \"valor máximo ... teto de 4500 centavos.\" Implementation uses Math.min(total,4500) which caps. Good.\n\nPotential bug: If pesoGramas = 1001, pesoExcedente = 1, blocos = 0, remainder !=0 => blocos=1, adicional=300, total=1800, ok.\n\nPotential missing handling for pesoGramas exactly 1000 returns 1500 (rule says inclusive). Good.\n\nPotential performance not an issue.\n\nMaybe issue: The class is not final, could be extended - not a problem.\n\nPotential issue: The method calcularFrete returns int, but could exceed int? Not.\n\nPotential issue: The Javadoc @throws mentions IllegalArgumentException if pesoGramas <=0 OR valorPedido <=0. Implementation matches.\n\nPotential style: Use of magic numbers (20000,1500,500,300,4500) should be constants. Category: ausente (should be constants). Severity: menor.\n\nPotential issue: No handling for negative pesoExcedente leading to negative adicional if weight less than 1000 (but method not called). But if future change, might be issue. Could be considered robust.\n\nPotential issue: The method validarDadosPedido is private but could be static. Not a bug.\n\nPotential issue: The Javadoc says \"frete máximo: o valor final cobrado não pode exceder o teto de 4500 centavos.\" Implementation uses Math.min(total,4500) but does not consider that base 1500 + adicional could be less than 4500 but still exceed if free shipping? Not relevant.\n\nPotential issue: The code does not consider that free shipping overrides max cap (returns 0). That's fine.\n\nPotential issue: No handling for overflow of multiplication (blocos*300) if pesoExcedente huge. Could overflow int. Should use long or check. Severity: menor but could cause malfunction for extreme inputs. Category: ausente (check overflow).\n\nPotential issue: The class does not have a package declaration, but not necessarily error.\n\nPotential issue: The Javadoc for calcularFrete mentions \"bloco de 500 gramas adicionais ou fração\" - code implements correctly.\n\nThus list issues: magic numbers, potential overflow, method could be static, missing final, no null check not needed.\n\nWe'll list maybe 3 issues.\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.310490237,
+      "prompt_tokens": 1058,
+      "prompt_time": 0.064899645,
+      "completion_tokens": 1099,
+      "completion_time": 2.312593083,
+      "total_tokens": 2157,
+      "total_time": 2.377492728,
+      "completion_tokens_details": {
+        "reasoning_tokens": 728
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_4727af4560",
+    "x_groq": {
+      "id": "req_01m72yj3sze448fzqvax2qjvb7",
+      "seed": 178584207
+    },
+    "service_tier": "on_demand"
+  }
+}

@@ -1,0 +1,11 @@
+Sensibilidade bruta (restrita, V_bug, sem retirados): 39/40
+C1: D1 5/5, D2 5/5 | restrita V_bug: VP 10, DUP 2, FP 0, OA 0, VPP 100% | restrita V_fix: 0 apontamentos | genérica V_fix: 3 FP, 2 OA
+C2: D1 5/5, D2 4/5 | restrita V_bug: VP 9, DUP 0, FP 0, OA 0, VPP 100% | restrita V_fix: 0 apontamentos | genérica V_fix: 2 FP, 0 OA
+C3: D1 5/5, D2 5/5 | restrita V_bug: VP 10, DUP 0, FP 0, OA 0, VPP 100% | restrita V_fix: 0 apontamentos | genérica V_fix: 13 FP, 0 OA
+C4: D1 5/5, D2 5/5 | restrita V_bug: VP 10, DUP 0, FP 0, OA 0, VPP 100% | restrita V_fix: 0 apontamentos | genérica V_fix: 9 FP, 0 OA
+Análise de erro do modelo (restrita em V_bug, salvo indicação):
+  apontamento fora do Javadoc (instrução genérica): 27
+  exemplo numérico incorreto: 7
+  apontamento duplicado: 2
+  apontamento retirado pelo próprio modelo: 1
+  defeito não apontado: 1

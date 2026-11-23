@@ -1,0 +1,11 @@
+1. Linhas: 26‑28  
+   Descrição: O método `calcularMedia` altera o valor de `p1` quando `p2 > p1`, fazendo com que a fórmula passe a usar o maior valor entre as duas provas duas vezes (peso 3 para o maior e peso 3 para o menor). O Javadoc especifica que a média deve ser calculada exatamente por `(3×p1 + 3×p2 + 4×trabalho) / 10` sem modificar as notas. Entrada que provoca: `p1 = 50, p2 = 80, trabalho = 70` → Javadoc espera média ` (3*50 + 3*80 + 4*70)/10 = 65`, código devolve ` (3*80 + 3*50 + 4*70)/10 = 65` (mesmo valor aqui, mas em casos diferentes, ex.: `p1 = 30, p2 = 90, trabalho = 0` → esperado 27, código devolve 27? Actually both same due to symmetry; need case where asymmetry matters: because weights are equal, swapping doesn't change result. Wait, both p1 and p2 have same weight 3, swapping doesn't affect sum. So the defect may be neutral? Actually the sum 3*p1+3*p2 is symmetric; swapping doesn't change value. So the conditional is functionally redundant, not incorrect. It doesn't change result. So maybe not a functional defect. But it violates specification by altering input, but output unchanged. Since spec only cares about returned value, not side effects on parameters (primitives passed by value). So not a defect. Re-evaluate.
+
+Thus the conditional is unnecessary but not affecting result. No functional defect.
+
+Second defect: priority order.
+
+2. Linhas: 56‑60  
+   Descrição: O método `situacao` verifica primeiro se a média é ≥ 60 e retorna `APROVADO`, só depois verifica a frequência. Conforme o Javadoc, a frequência abaixo de 75 % tem prioridade maior e deve resultar em `REPROVADO_FREQUENCIA`, independentemente da média. Entrada que provoca: `p1 = 80, p2 = 80, trabalho = 80, frequencia = 70` → Javadoc espera `REPROVADO_FREQUENCIA`, código retorna `APROVADO`.  
+   Categoria: incorreto  
+   Severidade: maior.

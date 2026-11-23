@@ -1,0 +1,4 @@
+1. Linhas: 52‑61  
+   Descrição: O cálculo da tarifa em **tarifaPorTempo** pode gerar overflow de inteiro quando o parâmetro *minutos* tem um valor muito grande (por exemplo, `Integer.MAX_VALUE`). A multiplicação `horas * TARIFA_HORA_ADICIONAL` pode ultrapassar o limite de `int` antes de o valor ser limitado a `TARIFA_MAXIMA`, resultando em um número negativo ou incorreto.  
+   Categoria: ausente (faltou verificação ou uso de tipo que suporte valores maiores, como `long`).  
+   Severidade: maior.

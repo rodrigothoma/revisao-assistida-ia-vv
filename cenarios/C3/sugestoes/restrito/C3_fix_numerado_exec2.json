@@ -1,0 +1,61 @@
+{
+  "unidade": "C3_fix_numerado.txt",
+  "execucao": 2,
+  "data_hora": "2026-11-10T11:40:39",
+  "prompt": "prompt_sistema.txt",
+  "modelo_solicitado": "openai/gpt-oss-120b",
+  "modelo_devolvido": "openai/gpt-oss-120b",
+  "system_fingerprint": "fp_e1a78f200e",
+  "raciocinio": "medium",
+  "motivo_fim": "stop",
+  "uso": {
+    "queue_time": 0.208328872,
+    "prompt_tokens": 1116,
+    "prompt_time": 0.053941585,
+    "completion_tokens": 807,
+    "completion_time": 1.696649012,
+    "total_tokens": 1923,
+    "total_time": 1.750590597,
+    "completion_tokens_details": {
+      "reasoning_tokens": 792
+    }
+  },
+  "raciocinio_modelo": "We need to find functional defects vs Javadoc.\n\nLet's examine spec:\n\nRules:\n\n1. Free shipping if order value >= 20000 centavos inclusive => return 0. Code does that.\n\n2. Orders with weight up to 1000g inclusive pay base tariff fixed 1500 cents. Code: if pesoGramas <= 1000 return 1500. Good.\n\n3. Above 1000g, sum base plus 300 per block of 500g additional or fraction. Code: pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso computes blocks = pesoExcedente/500; if remainder !=0 then blocks++; then return blocks*300. This matches spec.\n\nBut need to check edge cases: What about weight exactly 1000? Already handled earlier. Weight 1001 => pesoExcedente=1; blocks=1/500=0; remainder !=0 => blocks=1; additional=300. total=1500+300=1800. That's correct (since fraction counts as a block). Good.\n\n4. Maximum shipping cap: final value cannot exceed 4500. Code: return Math.min(total, 4500). Good.\n\nNow check validation: throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code does that. Good.\n\nPotential defect: The free shipping rule should apply regardless of weight, but code checks valorPedido >= 20000 after validation. That works.\n\nPotential defect: For pesoGramas > 1000 and valorPedido also >=20000, code would return 0 due to early check before weight handling. That's correct.\n\nNow look at calculateAdicionalPeso: For pesoExcedente negative? Not possible because called only when pesoGramas >1000, so positive.\n\nEdge case: If pesoExcedente is exactly multiple of 500, e.g., pesoGramas=1500 => pesoExcedente=500 => blocks=500/500=1, remainder 0 => no increment, additional=300. That's correct: one block of 500 => 300.\n\nEdge case: Very large weight leading to total >4500; min caps.\n\nSeems correct.\n\nPotential hidden issue: The Javadoc says \"acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" It doesn't mention that base 1500 is always applied even when weight > 1000; code does that.\n\nOne nuance: If weight is exactly 0? Validation throws. Good.\n\nPotential defect: The method validarDadosPedido is private but spec only says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. That's fine.\n\nAny missing behavior? The Javadoc does not mention handling negative values beyond throwing exception.\n\nPotential functional bug: The calculation of additional weight uses integer division and rounding up to next block for any fraction. That's correct.\n\nBut consider overflow: if pesoExcedente large, blocks*300 could overflow int. Not likely but could be considered functional. However spec not mention large values.\n\nAnother possible defect: The free shipping condition should be based on valorPedido before validation? Should be after validation; fine.\n\nCheck line numbers: any off-by-one? The max shipping cap: should apply after adding base and additional. Code does.\n\nThus seems no functional defect.\n\nBut double-check: The spec says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" If base is 1500 and additional may be 300 per block. Suppose weight leads to total 4700, code caps to 4500. Good.\n\nNow think about scenario where weight >1000 but valorPedido >=20000: code returns 0 before weight check, which is correct.\n\nAll seems okay.\n\nThus answer: \"Nenhum defeito encontrado.\"\n\n",
+  "resposta_completa": {
+    "id": "chatcmpl-05fc4317-bc99-47ab-b9c6-8b722828f95b",
+    "object": "chat.completion",
+    "created": 1794321655,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Nenhum defeito encontrado.",
+          "reasoning": "We need to find functional defects vs Javadoc.\n\nLet's examine spec:\n\nRules:\n\n1. Free shipping if order value >= 20000 centavos inclusive => return 0. Code does that.\n\n2. Orders with weight up to 1000g inclusive pay base tariff fixed 1500 cents. Code: if pesoGramas <= 1000 return 1500. Good.\n\n3. Above 1000g, sum base plus 300 per block of 500g additional or fraction. Code: pesoExcedente = pesoGramas - 1000; then calcularAdicionalPeso computes blocks = pesoExcedente/500; if remainder !=0 then blocks++; then return blocks*300. This matches spec.\n\nBut need to check edge cases: What about weight exactly 1000? Already handled earlier. Weight 1001 => pesoExcedente=1; blocks=1/500=0; remainder !=0 => blocks=1; additional=300. total=1500+300=1800. That's correct (since fraction counts as a block). Good.\n\n4. Maximum shipping cap: final value cannot exceed 4500. Code: return Math.min(total, 4500). Good.\n\nNow check validation: throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. Code does that. Good.\n\nPotential defect: The free shipping rule should apply regardless of weight, but code checks valorPedido >= 20000 after validation. That works.\n\nPotential defect: For pesoGramas > 1000 and valorPedido also >=20000, code would return 0 due to early check before weight handling. That's correct.\n\nNow look at calculateAdicionalPeso: For pesoExcedente negative? Not possible because called only when pesoGramas >1000, so positive.\n\nEdge case: If pesoExcedente is exactly multiple of 500, e.g., pesoGramas=1500 => pesoExcedente=500 => blocks=500/500=1, remainder 0 => no increment, additional=300. That's correct: one block of 500 => 300.\n\nEdge case: Very large weight leading to total >4500; min caps.\n\nSeems correct.\n\nPotential hidden issue: The Javadoc says \"acima de 1000 gramas, soma-se a tarifa base mais 300 centavos para cada bloco de 500 gramas adicionais ou fração.\" It doesn't mention that base 1500 is always applied even when weight > 1000; code does that.\n\nOne nuance: If weight is exactly 0? Validation throws. Good.\n\nPotential defect: The method validarDadosPedido is private but spec only says throws IllegalArgumentException if pesoGramas <=0 or valorPedido <=0. That's fine.\n\nAny missing behavior? The Javadoc does not mention handling negative values beyond throwing exception.\n\nPotential functional bug: The calculation of additional weight uses integer division and rounding up to next block for any fraction. That's correct.\n\nBut consider overflow: if pesoExcedente large, blocks*300 could overflow int. Not likely but could be considered functional. However spec not mention large values.\n\nAnother possible defect: The free shipping condition should be based on valorPedido before validation? Should be after validation; fine.\n\nCheck line numbers: any off-by-one? The max shipping cap: should apply after adding base and additional. Code does.\n\nThus seems no functional defect.\n\nBut double-check: The spec says \"valor final cobrado não pode exceder o teto de 4500 centavos.\" If base is 1500 and additional may be 300 per block. Suppose weight leads to total 4700, code caps to 4500. Good.\n\nNow think about scenario where weight >1000 but valorPedido >=20000: code returns 0 before weight check, which is correct.\n\nAll seems okay.\n\nThus answer: \"Nenhum defeito encontrado.\"\n\n"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.208328872,
+      "prompt_tokens": 1116,
+      "prompt_time": 0.053941585,
+      "completion_tokens": 807,
+      "completion_time": 1.696649012,
+      "total_tokens": 1923,
+      "total_time": 1.750590597,
+      "completion_tokens_details": {
+        "reasoning_tokens": 792
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_e1a78f200e",
+    "x_groq": {
+      "id": "req_01m72yf7rzeqhshnv00tbwxgz4",
+      "seed": 1327679922
+    },
+    "service_tier": "on_demand"
+  }
+}

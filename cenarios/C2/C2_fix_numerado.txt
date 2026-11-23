@@ -1,0 +1,77 @@
+ 1 | /**
+ 2 |  * Calcula a média e a situação final dos alunos de uma disciplina.
+ 3 |  * As notas são em décimos de ponto, de 0 a 100 (75 significa 7,5).
+ 4 |  */
+ 5 | public class AvaliacaoDisciplina {
+ 6 | 
+ 7 |     /** Situação final do aluno na disciplina. */
+ 8 |     public enum Situacao { APROVADO, EXAME, REPROVADO, REPROVADO_FREQUENCIA }
+ 9 | 
+10 |     /**
+11 |      * Calcula a média final do aluno.
+12 |      *
+13 |      * <p>A média é (3 × p1 + 3 × p2 + 4 × trabalho) / 10, com divisão
+14 |      * inteira: a parte fracionária é descartada.</p>
+15 |      *
+16 |      * @param p1       nota da primeira prova, de 0 a 100
+17 |      * @param p2       nota da segunda prova, de 0 a 100
+18 |      * @param trabalho nota do trabalho, de 0 a 100
+19 |      * @return a média, de 0 a 100
+20 |      * @throws IllegalArgumentException se alguma nota estiver fora de 0 a 100
+21 |      */
+22 |     public int calcularMedia(int p1, int p2, int trabalho) {
+23 |         validarNota(p1);
+24 |         validarNota(p2);
+25 |         validarNota(trabalho);
+26 |         return (3 * p1 + 3 * p2 + 4 * trabalho) / 10;
+27 |     }
+28 | 
+29 |     /**
+30 |      * Define a situação final do aluno a partir das notas e da frequência.
+31 |      *
+32 |      * <p>Regras, em ordem de prioridade:</p>
+33 |      * <ol>
+34 |      *   <li>Frequência abaixo de 75% resulta em REPROVADO_FREQUENCIA,
+35 |      *       qualquer que seja a média.</li>
+36 |      *   <li>Média a partir de 60 resulta em APROVADO.</li>
+37 |      *   <li>Média de 40 a 59 resulta em EXAME.</li>
+38 |      *   <li>Média abaixo de 40 resulta em REPROVADO.</li>
+39 |      * </ol>
+40 |      *
+41 |      * @param p1         nota da primeira prova, de 0 a 100
+42 |      * @param p2         nota da segunda prova, de 0 a 100
+43 |      * @param trabalho   nota do trabalho, de 0 a 100
+44 |      * @param frequencia frequência do aluno, em porcentagem, de 0 a 100
+45 |      * @return a situação final
+46 |      * @throws IllegalArgumentException se alguma nota ou a frequência
+47 |      *         estiver fora de 0 a 100
+48 |      */
+49 |     public Situacao situacao(int p1, int p2, int trabalho, int frequencia) {
+50 |         if (frequencia < 0 || frequencia > 100) {
+51 |             throw new IllegalArgumentException("frequencia invalida: " + frequencia);
+52 |         }
+53 |         int media = calcularMedia(p1, p2, trabalho);
+54 |         if (frequencia < 75) {
+55 |             return Situacao.REPROVADO_FREQUENCIA;
+56 |         }
+57 |         if (media >= 60) {
+58 |             return Situacao.APROVADO;
+59 |         }
+60 |         if (media >= 40) {
+61 |             return Situacao.EXAME;
+62 |         }
+63 |         return Situacao.REPROVADO;
+64 |     }
+65 | 
+66 |     /**
+67 |      * Verifica se uma nota está entre 0 e 100, inclusive.
+68 |      *
+69 |      * @param nota a nota a verificar
+70 |      * @throws IllegalArgumentException se a nota estiver fora de 0 a 100
+71 |      */
+72 |     private void validarNota(int nota) {
+73 |         if (nota < 0 || nota > 100) {
+74 |             throw new IllegalArgumentException("nota invalida: " + nota);
+75 |         }
+76 |     }
+77 | }

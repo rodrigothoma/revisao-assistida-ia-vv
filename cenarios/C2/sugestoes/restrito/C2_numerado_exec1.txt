@@ -1,0 +1,9 @@
+1. Linhas: 26‑28  
+   Descrição: O método `calcularMedia` altera o valor de `p1` quando `p2 > p1`, fazendo com que a média seja calculada usando o maior valor entre as duas provas no peso de 3, o que difere da fórmula especificada no Javadoc `(3 × p1 + 3 × p2 + 4 × trabalho) / 10`. Por exemplo, para p1=50, p2=80, trabalho=70 a média deveria ser (150+240+280)/10 = 67, mas o código devolve (240+150+280)/10 = 67 (mesmo valor neste caso), porém em outros combos (ex.: p1=30, p2=90, trabalho=50) a média correta seria 63, enquanto o código retorna (270+90+200)/10 = 56.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 57‑62  
+   Descrição: O método `situacao` verifica primeiro se a média é maior ou igual a 60 e devolve `APROVADO`, antes de checar a frequência. Conforme a especificação, a frequência abaixo de 75 % tem prioridade e deve resultar em `REPROVADO_FREQUENCIA`, independentemente da média. Assim, para frequência=70 e notas que geram média=80, o método retorna `APROVADO` em vez de `REPROVADO_FREQUENCIA`.  
+   Categoria: incorreto  
+   Severidade: maior

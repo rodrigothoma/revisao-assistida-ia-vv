@@ -1,0 +1,14 @@
+1. Linhas: 49‑50  
+   Descrição: A tarifa deve ser gratuita para permanências de até 15 minutos, inclusive. O código usa `if (minutos < 15)`, de modo que para `minutos == 15` a tarifa retornada é 800 em vez de 0.  
+   Categoria: incorreto  
+   Severidade: maior  
+
+2. Linhas: 34‑38  
+   Descrição: A regra 4 estabelece que a tarifa nunca pode ultrapassar 3000 centavos, e o desconto (regra 5) deve ser aplicado depois desse limite. O método `calcularTarifa` nunca verifica nem impõe o teto de 3000, aplicando o desconto diretamente sobre o valor calculado, que pode ser maior que 3000. Por exemplo, para `minutos = 1000` a tarifa calculada seria 800 + ( (1000‑60+59)/60 )*300 = 800 + 16*300 = 5600, e o método retornaria 2800 após o desconto, violando o limite especificado.  
+   Categoria: ausente  
+   Severidade: maior  
+
+3. Linhas: 35‑37  
+   Descrição: O desconto de 50 % é aplicado antes de qualquer limite de tarifa, contrariando o Javadoc que indica que o desconto deve ser aplicado **depois** de aplicar o teto de 3000 centavos. Mesmo que o limite fosse implementado, a ordem atual estaria incorreta.  
+   Categoria: incorreto  
+   Severidade: maior

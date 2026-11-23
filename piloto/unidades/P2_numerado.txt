@@ -1,0 +1,191 @@
+     1	/**
+     2	 * <p>Operations for random {@code String}s.</p>
+     3	 * <p>Currently <em>private high surrogate</em> characters are ignored. 
+     4	 * These are Unicode characters that fall between the values 56192 (db80)
+     5	 * and 56319 (dbff) as we don't know how to handle them. 
+     6	 * High and low surrogates are correctly dealt with - that is if a 
+     7	 * high surrogate is randomly chosen, 55296 (d800) to 56191 (db7f) 
+     8	 * then it is followed by a low surrogate. If a low surrogate is chosen, 
+     9	 * 56320 (dc00) to 57343 (dfff) then it is placed after a randomly 
+    10	 * chosen high surrogate. </p>
+    11	 *
+    12	 * <p>#ThreadSafe#</p>
+    13	 * @since 1.0
+    14	 * @version $Id$
+    15	 */
+    16	public class RandomStringUtils {
+    17	    private static final Random RANDOM = new Random();
+    18	
+    19	    // ... (demais membros da classe omitidos) ...
+    20	
+    21	        /**
+    22	     * <p>Creates a random string whose length is the number of characters
+    23	     * specified.</p>
+    24	     *
+    25	     * <p>Characters will be chosen from the set of characters
+    26	     * specified by the string, must not be empty. 
+    27	     * If null, the set of all characters is used.</p>
+    28	     *
+    29	     * @param count  the length of random string to create
+    30	     * @param chars  the String containing the set of characters to use,
+    31	     *  may be null, but must not be empty
+    32	     * @return the random string
+    33	     * @throws IllegalArgumentException if {@code count} &lt; 0 or the string is empty.
+    34	     */
+    35	    public static String random(int count, String chars) {
+    36	        if (chars == null) {
+    37	            return random(count, 0, 0, false, false, null, RANDOM);
+    38	        }
+    39	        return random(count, chars.toCharArray());
+    40	    }
+    41	
+    42	    /**
+    43	     * <p>Creates a random string whose length is the number of characters
+    44	     * specified.</p>
+    45	     *
+    46	     * <p>Characters will be chosen from the set of characters specified.</p>
+    47	     *
+    48	     * @param count  the length of random string to create
+    49	     * @param chars  the character array containing the set of characters to use,
+    50	     *  may be null
+    51	     * @return the random string
+    52	     * @throws IllegalArgumentException if {@code count} &lt; 0.
+    53	     */
+    54	    public static String random(int count, char... chars) {
+    55	        if (chars == null) {
+    56	            return random(count, 0, 0, false, false, null, RANDOM);
+    57	        }
+    58	        return random(count, 0, chars.length, false, false, chars, RANDOM);
+    59	    }
+    60	
+    61	    /**
+    62	     * <p>Creates a random string based on a variety of options, using
+    63	     * supplied source of randomness.</p>
+    64	     *
+    65	     * <p>If start and end are both {@code 0}, start and end are set
+    66	     * to {@code ' '} and {@code 'z'}, the ASCII printable
+    67	     * characters, will be used, unless letters and numbers are both
+    68	     * {@code false}, in which case, start and end are set to
+    69	     * {@code 0} and {@code Integer.MAX_VALUE}.
+    70	     *
+    71	     * <p>If set is not {@code null}, characters between start and
+    72	     * end are chosen.</p>
+    73	     *
+    74	     * <p>This method accepts a user-supplied {@link Random}
+    75	     * instance to use as a source of randomness. By seeding a single 
+    76	     * {@link Random} instance with a fixed seed and using it for each call,
+    77	     * the same random sequence of strings can be generated repeatedly
+    78	     * and predictably.</p>
+    79	     *
+    80	     * @param count  the length of random string to create
+    81	     * @param start  the position in set of chars to start at
+    82	     * @param end  the position in set of chars to end before
+    83	     * @param letters  only allow letters?
+    84	     * @param numbers  only allow numbers?
+    85	     * @param chars  the set of chars to choose randoms from, must not be empty.
+    86	     *  If {@code null}, then it will use the set of all chars.
+    87	     * @param random  a source of randomness.
+    88	     * @return the random string
+    89	     * @throws ArrayIndexOutOfBoundsException if there are not
+    90	     *  {@code (end - start) + 1} characters in the set array.
+    91	     * @throws IllegalArgumentException if {@code count} &lt; 0 or the provided chars array is empty.
+    92	     * @since 2.0
+    93	     */
+    94	    public static String random(int count, int start, int end, boolean letters, boolean numbers,
+    95	                                char[] chars, Random random) {
+    96	        if (count == 0) {
+    97	            return "";
+    98	        } else if (count < 0) {
+    99	            throw new IllegalArgumentException("Requested random string length " + count + " is less than 0.");
+   100	        }
+   101	
+   102	        if (start == 0 && end == 0) {
+   103	                if (!letters && !numbers) {
+   104	                    end = Integer.MAX_VALUE;
+   105	                } else {
+   106	                    end = 'z' + 1;
+   107	                    start = ' ';                
+   108	                }
+   109	        }
+   110	
+   111	        char[] buffer = new char[count];
+   112	        int gap = end - start;
+   113	
+   114	        while (count-- != 0) {
+   115	            char ch;
+   116	            if (chars == null) {
+   117	                ch = (char) (random.nextInt(gap) + start);
+   118	            } else {
+   119	                ch = chars[random.nextInt(gap) + start];
+   120	            }
+   121	            if (letters && Character.isLetter(ch)
+   122	                    || numbers && Character.isDigit(ch)
+   123	                    || !letters && !numbers) {
+   124	                if(ch >= 56320 && ch <= 57343) {
+   125	                    if(count == 0) {
+   126	                        count++;
+   127	                    } else {
+   128	                        // low surrogate, insert high surrogate after putting it in
+   129	                        buffer[count] = ch;
+   130	                        count--;
+   131	                        buffer[count] = (char) (55296 + random.nextInt(128));
+   132	                    }
+   133	                } else if(ch >= 55296 && ch <= 56191) {
+   134	                    if(count == 0) {
+   135	                        count++;
+   136	                    } else {
+   137	                        // high surrogate, insert low surrogate before putting it in
+   138	                        buffer[count] = (char) (56320 + random.nextInt(128));
+   139	                        count--;
+   140	                        buffer[count] = ch;
+   141	                    }
+   142	                } else if(ch >= 56192 && ch <= 56319) {
+   143	                    // private high surrogate, no effing clue, so skip it
+   144	                    count++;
+   145	                } else {
+   146	                    buffer[count] = ch;
+   147	                }
+   148	            } else {
+   149	                count++;
+   150	            }
+   151	        }
+   152	        return new String(buffer);
+   153	    }
+   154	}
+   155	
+   156	// ===================== TESTES =====================
+   157	
+   158	// Trechos de RandomStringUtilsTest.testRandomStringUtils() (partes que não exercitam a unidade foram omitidas)
+   159	    
+   160	   /**
+   161	     * Test the implementation
+   162	     */
+   163	    public void testRandomStringUtils() {
+   164	        String r1, r2;
+   165	
+   166	        String set = "abcdefg";
+   167	        r1 = RandomStringUtils.random(50, set);
+   168	        assertEquals("random(50, \"abcdefg\")", 50, r1.length());
+   169	        for(int i = 0; i < r1.length(); i++) {
+   170	            assertTrue("random char in set", set.indexOf(r1.charAt(i)) > -1);
+   171	        }
+   172	
+   173	        set = "stuvwxyz";
+   174	        r1 = RandomStringUtils.random(50, set.toCharArray());
+   175	        assertEquals("random(50, \"stuvwxyz\")", 50, r1.length());
+   176	        for(int i = 0; i < r1.length(); i++) {
+   177	            assertTrue("random char in set", set.indexOf(r1.charAt(i)) > -1);
+   178	        }
+   179	
+   180	        r1 = RandomStringUtils.random(50, (char[]) null);
+   181	        assertEquals("random(50) length", 50, r1.length());
+   182	
+   183	        long seed = System.currentTimeMillis();
+   184	        r1 = RandomStringUtils.random(50,0,0,true,true,null,new Random(seed));
+   185	        r2 = RandomStringUtils.random(50,0,0,true,true,null,new Random(seed));
+   186	        assertEquals("r1.equals(r2)", r1, r2);
+   187	
+   188	        r1 = RandomStringUtils.random(0);
+   189	        assertEquals("random(0).equals(\"\")", "", r1);
+   190	    }
+   191	    
