@@ -15,6 +15,15 @@ EDE A coberto = 6/8; não coberto = 2/8
   sem R3/C1: A 8/14; coberto 6/7; não coberto 2/7
   creditando VP aceitos e não relatados [('R3', 'C1'), ('R3', 'C3')]: A 10/16; coberto 8/8; não coberto 2/8
 sem a 1ª revisão: T_H 10:03; T_A 13:49; E_liq -37.6%
+  posição 1: T_A - T_H = 453.0 s
+  posição 2: T_A - T_H = 14.5 s
+  posição 3: T_A - T_H = 88.0 s
+  posição 4: T_A - T_H = 577.5 s
+detecção por metade da sessão: 1ª 8/16; 2ª 9/16
+  R1: média H 10.6 min; média A 15.9 min
+  R2: média H 8.0 min; média A 17.6 min
+  R3: média H 8.2 min; média A 13.0 min
+  R4: média H 15.4 min; média A 14.6 min
 EDE H por tipo: d1 6/8; d2 3/8
 VPP H = 9/10 (90%)
 VPP A = 8/10 (80%)

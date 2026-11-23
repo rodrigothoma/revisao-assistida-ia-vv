@@ -146,6 +146,19 @@ def main():
     a2 = [r["tempo_s"] for r in A if r["ordem"] > 1]
     th2, ta2 = sum(h2) / len(h2), sum(a2) / len(a2)
     out.append(f"sem a 1ª revisão: T_H {mmss(th2)}; T_A {mmss(ta2)}; E_liq {100 * (th2 - ta2) / th2:.1f}%")
+    # Discussão (Seção 5.6): diferença A - H por posição da sessão, detecção por
+    # metade da sessão e tempo médio de cada revisor em cada condição.
+    for o in (1, 2, 3, 4):
+        h = [r["tempo_s"] for r in H if r["ordem"] == o]
+        a = [r["tempo_s"] for r in A if r["ordem"] == o]
+        out.append(f"  posição {o}: T_A - T_H = {sum(a) / len(a) - sum(h) / len(h):.1f} s")
+    m1 = sum(r["D1"] + r["D2"] for r in revisoes if r["ordem"] <= 2)
+    m2 = sum(r["D1"] + r["D2"] for r in revisoes if r["ordem"] > 2)
+    out.append(f"detecção por metade da sessão: 1ª {m1}/16; 2ª {m2}/16")
+    for rv in REVISORES:
+        h = [r["tempo_s"] for r in H if r["revisor"] == rv]
+        a = [r["tempo_s"] for r in A if r["revisor"] == rv]
+        out.append(f"  {rv}: média H {sum(h) / len(h) / 60:.1f} min; média A {sum(a) / len(a) / 60:.1f} min")
     out.append(f"EDE H por tipo: d1 {ede(H, ('D1',))[0]}/8; d2 {ede(H, ('D2',))[0]}/8")
     for cond, regs in (("H", H), ("A", A)):
         vp = sum(r["VP"] for r in regs); fp = sum(r["FP"] for r in regs)

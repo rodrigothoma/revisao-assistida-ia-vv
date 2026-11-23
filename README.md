@@ -82,6 +82,7 @@ python3 piloto/unidades/custo_gemini.py cenarios  # tokens e custo estimado
 | Kappa e acordo (Seção 5.5) | `dados/coleta/kappa.py` e `kappa.py modelo` |
 | Caracterização dos revisores (Seção 5.1) | `dados/coleta/caracterizacao.csv` |
 | Durações das sessões e largada | `dados/sessao.md` e `resumo.txt` |
+| Discussão (diferença por posição, detecção por metade da sessão, média por revisor) | `dados/coleta/analisar.py` → `resumo.txt` |
 | Instruções ao modelo e evidência de viabilidade | `apendices.md` |
 
 ## 7. Licença e como citar
