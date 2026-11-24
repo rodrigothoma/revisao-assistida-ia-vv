@@ -36,10 +36,10 @@ Requisitos: Python 3.10 ou superior (testado com 3.13), sem bibliotecas externas
 
 ```bash
 # Medidas do artigo a partir dos dados (menos de 1 s)
-python3 dados/coleta/analisar.py          # Tabelas 3 a 7; grava revisoes.csv, triagem.csv e resumo.txt
+python3 dados/coleta/analisar.py          # Tabelas 3, 4 e 5; grava revisoes.csv, triagem.csv e resumo.txt
 python3 dados/coleta/kappa.py             # concordância entre preparadores nas alegações dos revisores
 python3 dados/coleta/kappa.py modelo      # concordância nas 60 saídas do modelo
-python3 dados/coleta/consenso.py          # Tabela 8: desempenho bruto do modelo e análise de erros
+python3 dados/coleta/consenso.py          # Tabela 6: desempenho bruto do modelo e análise de erros
 
 # Comprovação do oráculo (alguns segundos por cenário)
 ./cenarios/rodar_testes.sh C1             # V_fix passa tudo; V_bug falha só nos testes [GATILHO]
@@ -74,11 +74,9 @@ python3 piloto/unidades/custo_gemini.py cenarios  # tokens e custo estimado
 | Tabela 1 (quadrado latino) | `DELINEAMENTO` em `dados/coleta/analisar.py`; `dados/sorteio.md` |
 | Tabela 2 (cenários) | `cenarios/C<n>/oraculo.md` (linhas `cloc`, complexidade, defeitos) |
 | Tabela 3 (síntese), incluindo as leituras alternativas | `dados/coleta/analisar.py` → `resumo.txt` |
-| Tabela 4 (tempo por cenário) e análise sem a 1ª revisão | `dados/coleta/analisar.py` → `resumo.txt` |
-| Tabela 5 (resultados por revisão) | `dados/coleta/analisar.py` → `revisoes.csv` |
-| Tabela 6 (matriz defeito × revisor) | `revisoes.csv` cruzado com `DELINEAMENTO` e `COBERTO` em `analisar.py` |
-| Tabela 7 (triagem) | `dados/coleta/analisar.py` → `triagem.csv` |
-| Tabela 8 (desempenho bruto do modelo) | `dados/coleta/consenso.py` → `modelo_bruto.txt`, a partir de `coleta/cego/modelo_consenso.csv` |
+| Tabela 4 (resultados por revisão, com cobertura e triagem) | `dados/coleta/analisar.py` → `revisoes.csv` e `triagem.csv` |
+| Tabela 5 (tempo por cenário) e análise sem a 1ª revisão | `dados/coleta/analisar.py` → `resumo.txt` |
+| Tabela 6 (desempenho bruto do modelo) | `dados/coleta/consenso.py` → `modelo_bruto.txt`, a partir de `coleta/cego/modelo_consenso.csv` |
 | Kappa e acordo (Seção 5.5) | `dados/coleta/kappa.py` e `kappa.py modelo` |
 | Caracterização dos revisores (Seção 5.1) | `dados/coleta/caracterizacao.csv` |
 | Durações das sessões e largada | `dados/sessao.md` e `resumo.txt` |
